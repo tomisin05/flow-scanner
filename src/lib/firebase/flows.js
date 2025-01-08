@@ -109,3 +109,12 @@ export async function updateFlow(flowId, userId, updates) {
     lastModified: new Date()
   });
 }
+
+
+// Add to your flows.js
+export function validateFlowData(flowData) {
+  if (!flowData.title) throw new Error('Title is required');
+  if (!flowData.userId) throw new Error('User ID is required');
+  if (!flowData.fileUrl) throw new Error('File URL is required');
+  return true;
+}
