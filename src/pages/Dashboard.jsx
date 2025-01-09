@@ -8,6 +8,7 @@
 //   const { user } = useAuth();
 //   const [showCamera, setShowCamera] = useState(false);
 //   const [flows, setFlows] = useState([]);
+//   const webcamRef = useRef(null);
   
 //   const handleCapture = async () => {
 //     const imageSrc = webcamRef.current.getScreenshot();
@@ -132,6 +133,34 @@ function Dashboard() {
   const [flows, setFlows] = useState([]);
   const webcamRef = useRef(null); // Add this line - it was missing
 
+  const formatDate = (dateValue) => {
+    if (!dateValue) return 'N/A';
+    
+    let date;
+    if (typeof dateValue === 'string') {
+      // If it's a string, try to create a new Date object
+      date = new Date(dateValue);
+    } else if (dateValue instanceof Date) {
+      // If it's already a Date object, use it directly
+      date = dateValue;
+    } else if (typeof dateValue.toDate === 'function') {
+      // If it's a Firestore Timestamp, convert to Date
+      date = dateValue.toDate();
+    } else {
+      // If we can't recognize the format, return 'Invalid Date'
+      return 'Invalid Date';
+    }
+    
+    // Check if the date is valid
+    if (isNaN(date.getTime())) {
+      return 'Invalid Date';
+    }
+    
+    // Format the date
+    return date.toLocaleDateString();
+  };
+  
+
   const handleCapture = async () => {
     if (!webcamRef.current) {
       console.error('Webcam not initialized');
@@ -248,7 +277,7 @@ function Dashboard() {
             <div className="p-4">
               <h3 className="font-semibold text-lg mb-2">{flow.title}</h3>
               <p className="text-gray-600 text-sm">
-                {flow.createdAt.toDate().toLocaleDateString()}
+                {formatDate(flow.createdAt)}
               </p>
               <div className="mt-2 flex flex-wrap gap-2">
                 {flow.tags.map((tag, index) => (
