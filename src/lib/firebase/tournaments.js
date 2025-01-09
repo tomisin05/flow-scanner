@@ -5,7 +5,7 @@ import {
   getDoc, 
   getDocs, 
   query, 
-  where, 
+  where,  
   orderBy 
 } from 'firebase/firestore';
 import { db } from './config';
