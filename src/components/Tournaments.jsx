@@ -15,7 +15,7 @@ export default function Tournaments({ userId }) {
     name: '', 
     date: '',
     location: '',
-    description: ''
+    description: '' 
   });
 
   // Fetch tournaments
