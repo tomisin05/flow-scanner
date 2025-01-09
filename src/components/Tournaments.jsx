@@ -12,7 +12,7 @@ export default function Tournaments({ userId }) {
   const [selectedTournament, setSelectedTournament] = useState(null);
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [newTournament, setNewTournament] = useState({
-    name: '',
+    name: '', 
     date: '',
     location: '',
     description: ''
