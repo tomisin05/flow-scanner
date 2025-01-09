@@ -381,7 +381,7 @@ function Dashboard() {
             {/* Background overlay */}
             <div className="fixed inset-0 transition-opacity bg-black bg-opacity-75" />
 
-            {/* Modal panel */}
+            {/* Modal p anel */}
             <div className="relative inline-block w-full max-w-2xl px-4 pt-5 pb-4 overflow-hidden text-left align-bottom transition-all transform bg-white rounded-lg shadow-xl sm:my-8 sm:align-middle sm:p-6">
               <div className="absolute top-0 right-0 pt-4 pr-4">
                 <button
