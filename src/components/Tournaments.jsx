@@ -8,7 +8,7 @@ import { createTournament } from '../lib/firebase/tournaments';
 export default function Tournaments({ userId }) {
   const [tournaments, setTournaments] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState(null); 
   const [selectedTournament, setSelectedTournament] = useState(null);
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [newTournament, setNewTournament] = useState({
