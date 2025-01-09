@@ -7,7 +7,7 @@ export async function createUserDocument(user) {
   // Check if user document already exists
   const userSnap = await getDoc(userRef);
   
-  if (!userSnap.exists()) {
+  if (!userSnap.exists()) { 
     const userData = {
       displayName: user.displayName,
       email: user.email,
