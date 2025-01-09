@@ -7,7 +7,7 @@ import Leaderboard from './pages/Leaderboard'
 import Tournaments from './components/Tournaments'
 import './App.css'
 
-function App() {
+function App() { 
   return (
     <AuthProvider>
       <BrowserRouter>
