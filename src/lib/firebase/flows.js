@@ -52,7 +52,7 @@ export async function uploadFlow(file, metadata, userId) {
 
 export async function getUserFlows(userId) {
   const q = query(
-    collection(db, 'flows'),
+    collection(db, 'flows'), 
     where('userId', '==', userId),
     orderBy('uploadDate', 'desc') 
   );
