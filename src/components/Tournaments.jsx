@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../lib/firebase/config';
-import { FlowUpload } from './FlowUpload';
+import FlowUpload from './FlowUpload';
 import { createTournament } from '../lib/firebase/tournaments';
 
 export default function Tournaments({ userId }) {
