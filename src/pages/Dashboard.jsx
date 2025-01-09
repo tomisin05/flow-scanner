@@ -385,7 +385,7 @@ function Dashboard() {
             <div className="relative inline-block w-full max-w-2xl px-4 pt-5 pb-4 overflow-hidden text-left align-bottom transition-all transform bg-white rounded-lg shadow-xl sm:my-8 sm:align-middle sm:p-6">
               <div className="absolute top-0 right-0 pt-4 pr-4">
                 <button
-                  onClick={() => setShowUploadModal(false)}
+                  onClick={() => setShowUploadModal(false) }
                   className="text-gray-400 hover:text-gray-500 focus:outline-none"
                 >
                   <span className="sr-only">Close</span>
