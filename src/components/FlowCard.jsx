@@ -86,7 +86,7 @@ const FlowCard = ({ flow }) => {
               key={index}
               className="px-2 py-1 bg-gray-100 text-sm rounded-full text-gray-600"
             >
-              {tag}
+              {tag} 
             </span>
           ))}
         </div>
