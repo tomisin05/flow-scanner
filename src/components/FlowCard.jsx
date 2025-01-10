@@ -100,4 +100,4 @@ const FlowCard = ({ flow }) => {
   );
 };
 
-export default FlowCard; 
+export default FlowCard;
