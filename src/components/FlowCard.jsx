@@ -77,7 +77,7 @@ const FlowCard = ({ flow }) => {
           <p className="text-sm text-gray-600 mb-2">
             {flow.tournament.name} - {flow.round}
           </p>
-        )}
+        )} 
         
         {/* Tags */}
         <div className="flex flex-wrap gap-2 mt-2">
