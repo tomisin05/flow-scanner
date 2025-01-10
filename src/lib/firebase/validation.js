@@ -13,7 +13,7 @@ export function validateProfileUpdates(updates) {
   }
   
   if (updates.email && typeof updates.email !== 'string') {
-    throw new ValidationError('Email must be a string');
+    throw new ValidationError('Email must be a string'); 
   }
   
   if (updates.email && !updates.email.includes('@')) {
