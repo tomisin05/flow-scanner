@@ -9,7 +9,7 @@ export function validateProfileUpdates(updates) {
   }
   
   if (updates.displayName && typeof updates.displayName !== 'string') {
-    throw new ValidationError('Display name must be a string');
+    throw new ValidationError('Display n ame must be a string');
   }
   
   if (updates.email && typeof updates.email !== 'string') {
