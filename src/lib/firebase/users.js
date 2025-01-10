@@ -1,41 +1,66 @@
-import { doc, setDoc, getDoc, updateDoc, increment } from 'firebase/firestore';
+import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { db } from './config';
+import { getDocument, updateDocument } from './db-operations';
+import { validateUserData, validateProfileUpdates } from './validation';
 
 export async function createUserDocument(user) {
-  const userRef = doc(db, 'users', user.uid);
-  
-  // Check if user document already exists
-  const userSnap = await getDoc(userRef);
-  
-  if (!userSnap.exists()) { 
-    const userData = {
-      displayName: user.displayName,
-      email: user.email,
-      photoURL: user.photoURL,
-      createdAt: new Date(),
-      totalFlows: 0,
-      treesSpared: 0,
-      tournaments: []
-    };
+  validateUserData(user);
+  try {
+    const userRef = doc(db, 'users', user.uid);
+    const userSnap = await getDoc(userRef);
     
-    await setDoc(userRef, userData);
+    if (!userSnap.exists()) {
+      const userData = {
+        displayName: user.displayName,
+        email: user.email,
+        photoURL: user.photoURL,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        totalFlows: 0,
+        treesSpared: 0,
+        tournaments: []
+      };
+      
+      await setDoc(userRef, userData);
+    }
+  } catch (error) {
+    console.error('Error creating user document:', error);
+    throw error;
   }
 }
 
 export async function updateUserStats(userId, pageCount) {
-  const userRef = doc(db, 'users', userId);
-  await updateDoc(userRef, {
-    totalFlows: increment(1),
-    treesSpared: increment(pageCount * 0.0001) // Approximate paper saved
-  });
+  try {
+    const user = await getDocument('users', userId);
+    await updateDocument('users', userId, {
+      totalFlows: (user.totalFlows || 0) + 1,
+      treesSpared: (user.treesSpared || 0) + (pageCount * 0.0001) // Approximate paper saved
+    });
+  } catch (error) {
+    console.error('Error updating user stats:', error);
+    throw error;
+  }
 }
 
 export async function getUserProfile(userId) {
-  const userRef = doc(db, 'users', userId);
-  const userSnap = await getDoc(userRef);
-  
-  if (userSnap.exists()) {
-    return { id: userSnap.id, ...userSnap.data() };
+  try {
+    return await getDocument('users', userId);
+  } catch (error) {
+    if (error.message.includes('Document not found')) {
+      return null;
+    }
+    console.error('Error getting user profile:', error);
+    throw error;
   }
-  return null;
+}
+
+export async function updateUserProfile(userId, updates) {
+  try {
+    validateProfileUpdates(updates);
+    await updateDocument('users', userId, updates);
+    return true;
+  } catch (error) {
+    console.error('Error updating user profile:', error);
+    throw error;
+  }
 }

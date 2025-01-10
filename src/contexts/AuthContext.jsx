@@ -6,6 +6,8 @@ import {
   onAuthStateChanged
 } from 'firebase/auth';
 import { auth } from '../lib/firebase/config';
+import { createUserDocument } from '../lib/firebase/users';
+
 
 const AuthContext = createContext();
 
@@ -13,27 +15,71 @@ export function useAuth() {
   return useContext(AuthContext);
 }
 
-export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+// export function AuthProvider({ children }) {
+//   const [user, setUser] = useState(null);
+//   const [loading, setLoading] = useState(true);
 
-  function login() {
-    const provider = new GoogleAuthProvider();
-    return signInWithPopup(auth, provider);
-  }
+//   function login() {
+//     const provider = new GoogleAuthProvider();
+//     return signInWithPopup(auth, provider);
+//   }
 
-  function logout() {
-    return signOut(auth);
-  }
+//   function logout() {
+//     return signOut(auth);
+//   }
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setUser(user);
-      setLoading(false);
-    });
+  export function AuthProvider({ children }) {
+    const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
+  
+    useEffect(() => {
+      const unsubscribe = onAuthStateChanged(auth, async (user) => {
+        if (user) {
+          try {
+            await createUserDocument(user);
+          } catch (error) {
+            console.error("Error creating user document:", error);
+          }
+        }
+        setUser(user);
+        setLoading(false);
+      });
+  
+      return () => unsubscribe();
+    }, []);
 
-    return unsubscribe;
-  }, []);
+    function login() {
+        const provider = new GoogleAuthProvider();
+        return signInWithPopup(auth, provider);
+      }
+    
+      function logout() {
+        return signOut(auth);
+      }
+    
+  
+    // // Sign up function
+    // const signup = async (email, password) => {
+    //   try {
+    //     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    //     await createUserDocument(userCredential.user);
+    //     return userCredential.user;
+    //   } catch (error) {
+    //     throw error;
+    //   }
+    // };
+  
+    // // Sign in function
+    // const signin = async (email, password) => {
+    //   try {
+    //     const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    //     await createUserDocument(userCredential.user);
+    //     return userCredential.user;
+    //   } catch (error) {
+    //     throw error;
+    //   }
+    // };
+
 
   const value = {
     user,
@@ -46,4 +92,18 @@ export function AuthProvider({ children }) {
       {!loading && children}
     </AuthContext.Provider>
   );
-}
+  }
+
+  function validateUserData(user) {
+    if (!user) {
+      throw new Error('No user provided');
+    }
+    if (!user.uid) {
+      throw new Error('User must have a uid');
+    }
+    // Note: Other fields like displayName, photoURL might be null for new users
+    if (!user.email) {
+      throw new Error('User must have an email');
+    }
+  }
+  
