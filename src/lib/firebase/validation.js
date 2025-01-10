@@ -40,7 +40,7 @@ export function validateTournamentData(data) {
     throw new ValidationError('Tournament location must be a string');
   }
   
-  return true;
+  return true; 
 }
 
 export function validateUserData(user) {
