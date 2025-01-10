@@ -17,7 +17,7 @@ export function validateProfileUpdates(updates) {
   }
   
   if (updates.email && !updates.email.includes('@')) {
-    throw new ValidationError('Invalid email format');
+    throw new ValidationError('Invalid email for mat');
   }
   
   return true;
