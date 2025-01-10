@@ -344,7 +344,7 @@ const FilterBar = ({ onFilterChange }) => {
               </label>
               <input
                 type="text"
-                className="w-full  px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
                 placeholder="Enter team name"
                 value={filters.team}
                 onChange={(e) => handleFilterChange('team', e.target.value)}
