@@ -28,7 +28,7 @@ export function validateTournamentData(data) {
   if (!data.date) throw new ValidationError('Tournament date is required');
   if (!data.location) throw new ValidationError('Tournament location is required');
   
-  if (typeof data.name !== 'string') {
+  if (typeof data.name !== 'string') { 
     throw new ValidationError('Tournament name must be a string');
   }
   
