@@ -44,7 +44,7 @@ export function validateTournamentData(data) {
 }
 
 export function validateUserData(user) {
-  if (!user.uid) throw new ValidationError('User ID is required');
+  if (!user.uid) throw new ValidationError('User  ID is required');
   if (!user.email) throw new ValidationError('User email is required');
   if (typeof user.email !== 'string' || !user.email.includes('@')) {
     throw new ValidationError('Invalid email format');
