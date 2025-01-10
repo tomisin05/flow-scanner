@@ -251,6 +251,8 @@ const FilterBar = ({ onFilterChange }) => {
     handleFilterChange('tags', newTags);
   };
 
+ 
+
   return (
     <div className="bg-white rounded-lg shadow-lg mb-6 transition-all duration-200">
       {/* Filter Header */}
