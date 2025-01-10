@@ -54,7 +54,7 @@ export function validateUserData(user) {
 
 export function validateFlowData(flowData) {
   if (!flowData.title) throw new ValidationError('Title is required');
-  if (!flowData.userId) throw new ValidationError('User ID is required');
+  if (!flowData.userId) throw new ValidationError('User ID is r equired');
   if (!flowData.fileUrl) throw new ValidationError('File URL is required');
   return true;
 }
