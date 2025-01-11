@@ -47,7 +47,7 @@ export async function uploadFlow(file, metadata, userId) {
         userId,
         fileName: file.name,
         fileUrl: downloadURL,  
-        title: metadata.title || file.name,
+        title: metadata.title || file.name, 
         tournament: {
             id: tournamentId, // Use the ID of the existing tournament or null if not found
           name: metadata.tournament || null,
