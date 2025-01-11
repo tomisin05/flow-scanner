@@ -1,53 +1,84 @@
-# EcoFlow: Debate Flow Management System
+# EcoFlow: A Debate Flow Management System
 
-EcoFlow is a comprehensive web application designed to streamline the management of debate flows. It provides a user-friendly interface for debaters to upload, organize, and analyze their debate flows, enhancing their preparation and performance in competitive debate tournaments.
+EcoFlow is a comprehensive web application designed to streamline the management of debate flows. It provides a user-friendly interface for uploading, organizing, and analyzing debate flows, enhancing the experience for debaters, coaches, and judges alike.
 
-This application leverages modern web technologies and cloud services to offer a robust platform for debate flow management. Users can easily upload their flows, categorize them by tournaments, rounds, and teams, and access them from anywhere. The system also includes features for filtering and searching flows, making it an invaluable tool for debaters looking to improve their skills and track their progress over time.
+This React-based application integrates with Firebase for backend services, offering robust user authentication, real-time database operations, and secure file storage. The system allows users to upload debate flows, categorize them by tournaments and rounds, and apply various filters for easy retrieval.
 
-EcoFlow is built with React for the frontend, Express.js for the backend, and utilizes Firebase for authentication, database, and file storage. This architecture ensures a scalable, secure, and responsive application that can handle the needs of individual debaters and debate teams alike.
+Key features include:
+- User authentication and personalized dashboards
+- Flow upload with metadata tagging
+- Advanced filtering and search capabilities
+- Tournament management and flow organization
+- Leaderboard to track community impact
+- Responsive design for seamless use across devices
+
+EcoFlow aims to revolutionize how debate flows are managed, making it easier for the debate community to store, access, and analyze their performance data.
 
 ## Repository Structure
 
-The repository is organized into several key directories:
-
-- `src/`: Contains the main React application code
-  - `components/`: React components used throughout the application
-  - `contexts/`: Context providers, including AuthContext for user authentication
-  - `lib/`: Utility functions and Firebase configuration
-  - `pages/`: Main page components for different routes
-- `server/`: Express.js server code
-  - `routes/`: API route handlers for flows and users
-- `public/`: Static assets and HTML template
-
-Key files:
-- `src/App.jsx`: Main application component and routing setup
-- `src/main.jsx`: Entry point for the React application
-- `server/index.js`: Express server setup and API route configuration
-- `firebase.json`: Firebase configuration file
-- `firestore.indexes.json`: Firestore database index definitions
+```
+.
+├── src/
+│   ├── components/
+│   │   ├── EditFlowModal.jsx
+│   │   ├── FilterBar.jsx
+│   │   ├── FlowCard.jsx
+│   │   ├── FlowUpload.jsx
+│   │   ├── Layout.jsx
+│   │   ├── Navbar.jsx
+│   │   └── Tournaments.jsx
+│   ├── contexts/
+│   │   └── AuthContext.jsx
+│   ├── lib/
+│   │   └── firebase/
+│   │       ├── config.js
+│   │       ├── db-operations.js
+│   │       ├── flows.js
+│   │       ├── storage-utils.js
+│   │       ├── tournaments.js
+│   │       ├── users.js
+│   │       └── validation.js
+│   ├── pages/
+│   │   ├── Dashboard.jsx
+│   │   ├── Home.jsx
+│   │   └── Leaderboard.jsx
+│   ├── App.css
+│   ├── App.jsx
+│   ├── index.css
+│   └── main.jsx
+├── eslint.config.js
+├── firebase.json
+├── firestore.indexes.json
+├── index.html
+├── package.json
+├── postcss.config.js
+├── tailwind.config.js
+└── vite.config.js
+```
 
 ## Usage Instructions
 
 ### Installation
 
 Prerequisites:
-- Node.js (v14 or later)
-- npm (v6 or later)
-- Firebase account and project
+- Node.js (v14.0.0 or later)
+- npm (v6.0.0 or later)
 
-Steps:
+To set up the project locally, follow these steps:
+
 1. Clone the repository:
    ```
    git clone <repository-url>
-   cd flow-scanner
+   cd flow-scan
    ```
-2. Install dependencies for both client and server:
+
+2. Install dependencies:
    ```
    npm install
-   cd server && npm install && cd ..
    ```
+
 3. Set up environment variables:
-   Create a `.env` file in the root directory and add the following Firebase configuration:
+   Create a `.env` file in the root directory and add the following Firebase configuration variables:
    ```
    VITE_FIREBASE_API_KEY=your_api_key
    VITE_FIREBASE_AUTH_DOMAIN=your_auth_domain
@@ -59,147 +90,142 @@ Steps:
 
 ### Getting Started
 
-1. Start the development server:
-   ```
-   npm run dev
-   ```
-2. In a separate terminal, start the Express server:
-   ```
-   cd server && npm start
-   ```
-3. Open your browser and navigate to `http://localhost:5173`
+To run the development server:
 
-### Configuration Options
+```
+npm run dev
+```
 
-- Firebase configuration can be adjusted in `src/lib/firebase/config.js`
-- Express server port can be changed in `server/index.js`
+This will start the Vite development server. Open your browser and navigate to `http://localhost:5173` to view the application.
+
+### Configuration
+
+The application uses Firebase for backend services. Ensure that your Firebase project is set up with the following:
+
+- Authentication enabled (with email/password provider)
+- Firestore database created
+- Storage bucket initialized
+
+Update the Firebase configuration in `src/lib/firebase/config.js` if needed.
 
 ### Common Use Cases
 
 1. Uploading a Flow:
-   ```javascript
-   const handleFlowSubmit = async (flowData) => {
-     try {
-       await uploadFlow(file, metadata, userId);
-       alert('Flow uploaded successfully!');
-     } catch (error) {
-       console.error('Error uploading flow:', error);
-       alert('Failed to upload flow: ' + error.message);
-     }
-   };
-   ```
+   - Navigate to the Dashboard
+   - Click "Upload New Flow"
+   - Fill in the flow details and upload the file
+   - Click "Submit" to save the flow
 
-2. Fetching User Flows:
-   ```javascript
-   const fetchFlows = async () => {
-     try {
-       const flowsData = await getFilteredFlows(user.uid, filters);
-       setFlows(flowsData);
-     } catch (error) {
-       console.error('Error fetching flows:', error);
-       alert('Failed to fetch flows');
-     }
-   };
-   ```
+2. Filtering Flows:
+   - Use the FilterBar component on the Dashboard
+   - Select filters such as tournament, round, team, etc.
+   - The flow list will update automatically
+
+3. Editing a Flow:
+   - Click the "Edit" button on a FlowCard
+   - Update the flow details in the EditFlowModal
+   - Click "Save" to apply changes
+
+4. Deleting a Flow:
+   - Click the "Delete" button on a FlowCard
+   - Confirm the deletion when prompted
 
 ### Testing & Quality
 
-To run tests:
+To run linting:
+
 ```
-npm test
+npm run lint
 ```
 
 ### Troubleshooting
 
-1. Issue: Firebase authentication fails
-   - Error message: "Firebase: Error (auth/...)"
+1. Issue: Firebase configuration errors
+   - Error: "Firebase: Error (auth/invalid-api-key)."
    - Diagnostic process:
-     1. Check if Firebase configuration in `.env` is correct
-     2. Ensure Firebase Authentication is enabled in Firebase Console
-     3. Verify that the correct Firebase SDK version is installed
-   - Debug: Enable Firebase debug mode in the browser console:
-     ```javascript
-     firebase.debug.enable('*');
-     ```
+     1. Check if the `.env` file exists in the root directory
+     2. Verify that all Firebase configuration variables are correctly set
+     3. Ensure that the Firebase project is properly set up in the Firebase Console
+   - Solution: Double-check the Firebase configuration in both the `.env` file and the Firebase Console
 
-2. Issue: Flows not displaying in the dashboard
-   - Error message: "Error fetching flows"
+2. Issue: Flows not displaying on the Dashboard
+   - Error: No specific error message, but an empty flow list
    - Diagnostic process:
-     1. Check browser console for specific error messages
+     1. Check the browser console for any error messages
      2. Verify that the user is authenticated
-     3. Ensure Firestore rules allow read access for authenticated users
-   - Debug: Enable verbose logging in `src/lib/firebase/flows.js`:
-     ```javascript
-     console.log('Fetching flows with filters:', filters);
-     ```
+     3. Inspect the Firestore database to ensure flows are being saved
+   - Solution: 
+     - If not authenticated, log in to the application
+     - If flows exist in Firestore but don't display, check the filters applied in the FilterBar component
 
-3. Issue: File upload fails
-   - Error message: "Failed to upload flow"
-   - Diagnostic process:
-     1. Check if Firebase Storage is properly configured
-     2. Verify file size is within allowed limits
-     3. Ensure proper CORS configuration for Firebase Storage
-   - Debug: Add logging in `src/lib/firebase/storage-utils.js`:
-     ```javascript
-     console.log('Uploading file:', file.name, 'Size:', file.size);
-     ```
+### Debugging
+
+To enable verbose logging:
+
+1. In `src/lib/firebase/flows.js`, uncomment or add console.log statements in key functions like `uploadFlow`, `getUserFlows`, etc.
+2. In the browser, open the developer tools (F12) and check the console for detailed logs.
 
 Performance optimization:
-- Monitor Firestore read/write operations in Firebase Console
-- Use Firebase Performance Monitoring to track app performance
-- Implement pagination for large datasets in the dashboard
+- Monitor network requests in the browser's Network tab
+- Use React DevTools to identify unnecessary re-renders
+- Consider implementing pagination for large datasets in the Dashboard component
 
 ## Data Flow
 
-The EcoFlow application follows a client-server architecture with Firebase as the backend service. Here's an overview of the data flow:
+The EcoFlow application follows a unidirectional data flow pattern. Here's an overview of how data flows through the application:
 
-1. User Authentication:
-   Client (React) -> Firebase Authentication -> Client receives auth token
+1. User Authentication
+   [User] -> [AuthContext] -> [Firebase Auth]
 
-2. Flow Upload:
-   Client -> Express Server -> Firebase Storage (file) -> Firestore (metadata)
+2. Flow Management
+   [User] -> [Dashboard] -> [FlowUpload/EditFlowModal] -> [Firebase Functions] -> [Firestore/Storage]
 
-3. Fetching Flows:
-   Client -> Express Server -> Firestore -> Client receives flow data
-
-4. Updating Flows:
-   Client -> Express Server -> Firestore -> Client receives updated data
-
-5. Deleting Flows:
-   Client -> Express Server -> Firestore (delete document) -> Firebase Storage (delete file)
+3. Data Retrieval
+   [Firestore] -> [Firebase Functions] -> [Dashboard/FilterBar] -> [FlowCard]
 
 ```
-+--------+    Auth    +-------------------+
-| Client | <---------> | Firebase Auth    |
-+--------+             +-------------------+
-    |
-    | API Requests
-    v
-+--------+             +-------------------+
-| Express| <---------> | Firestore Database|
-| Server |             +-------------------+
-+--------+
-    |                  +-------------------+
-    +-----------------> | Firebase Storage  |
-                       +-------------------+
++-------------+     +--------------+     +------------------+
+|    User     | --> | AuthContext  | --> |   Firebase Auth  |
++-------------+     +--------------+     +------------------+
+       |                                          |
+       v                                          v
++-------------+     +--------------+     +------------------+
+|  Dashboard  | <-> | FlowUpload/  | <-> | Firebase         |
+|             |     | EditFlowModal|     | Functions        |
++-------------+     +--------------+     +------------------+
+       ^                                          |
+       |                                          v
++-------------+     +--------------+     +------------------+
+| FilterBar   | <-> |   FlowCard   | <-- | Firestore/       |
+|             |     |              |     | Storage          |
++-------------+     +--------------+     +------------------+
 ```
 
-Note: The Express server acts as a middleware to handle complex operations and maintain security by not exposing Firebase credentials to the client.
+Note: The Firebase Functions layer represents the client-side Firebase SDK operations, not serverless functions.
 
 ## Infrastructure
 
-The EcoFlow application utilizes Firebase for its backend infrastructure. Key resources defined in the configuration files include:
+The EcoFlow application utilizes Firebase as its backend infrastructure. Key resources include:
 
-Firestore Database:
-- Collection: `flows`
-  - Indexes:
-    - Composite index on `userId` (ASC), `status` (ASC), `createdAt` (DESC)
-    - Various other indexes for efficient querying based on tournament, round, team, and other fields
+1. Firebase Authentication
+   - Purpose: Manages user authentication and session handling
 
-Firebase Storage:
-- Used for storing uploaded flow files
+2. Cloud Firestore
+   - Collections:
+     - flows: Stores metadata for uploaded debate flows
+     - users: Stores user profile information
+     - tournaments: Stores tournament data
 
-Firebase Authentication:
-- Handles user authentication and authorization
+3. Firebase Storage
+   - Purpose: Stores uploaded flow files
 
-These resources are configured in the `firebase.json` and `firestore.indexes.json` files, ensuring optimal performance and security for the application.
+4. Firestore Indexes (defined in firestore.indexes.json):
+   - Collection: flows
+     - Indexes on userId, status, createdAt for efficient querying
+     - Additional indexes for filtering by tournament, round, team, etc.
+
+5. Firebase Configuration (src/lib/firebase/config.js):
+   - Initializes Firebase app with environment-specific configuration
+   - Exports initialized Firebase services (auth, db, storage)
+
+The application does not use a dedicated infrastructure-as-code solution like CloudFormation or Terraform. Instead, it relies on Firebase's built-in hosting and database services, configured through the Firebase Console and local configuration files.
