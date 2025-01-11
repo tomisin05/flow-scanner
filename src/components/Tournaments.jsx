@@ -549,7 +549,7 @@ export default function Tournaments() {
                   {selectedTournament?.id === tournament.id ? 'Hide Upload' : 'Upload Flow'}
                 </button>
                 <span className="text-sm text-gray-500">
-                  {tournament.flows?.length || 0} flows
+                  {tournament.flows?.length} flows
                 </span>
               </div>
               
