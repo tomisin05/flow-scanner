@@ -49,7 +49,7 @@ export async function uploadFlow(file, metadata, userId) {
         fileUrl: downloadURL,  
         title: metadata.title || file.name, 
         tournament: {
-            id: tournamentId, // Use the ID of the existing tournament or null if not found
+            id: tournamentId, // Use the ID of the ex isting tournament or null if not found
           name: metadata.tournament || null,
           date: metadata.tournamentDate || null,
         },
