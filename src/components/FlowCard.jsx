@@ -1,4 +1,6 @@
 // components/FlowCard.jsx
+
+
  const formatDate = (dateValue) => {
     if (!dateValue) return 'N/A';
     
@@ -27,7 +29,7 @@
   };
   
 
-const FlowCard = ({ flow }) => {
+const FlowCard = ({ flow, onEdit, onDelete }) => {
     if (!flow) {
     return null;
   }
@@ -78,6 +80,13 @@ const FlowCard = ({ flow }) => {
             {flow.tournament.name} - {flow.round}
           </p>
         )}
+
+        {/* Judge */}
+        {flow.judge && (
+          <p className="text-sm text-gray-600 mb-2">
+            Judge: {flow.judge}
+          </p>
+        )}
         
         {/* Tags */}
         <div className="flex flex-wrap gap-2 mt-2">
@@ -93,9 +102,30 @@ const FlowCard = ({ flow }) => {
         <div className="p-4">
         <p className="text-gray-600 text-sm">
         {flow.createdAt ? formatDate(flow.createdAt) : 'No date'}
-      </p>
-    </div>
+        </p>
+        </div>
       </div>
+
+      {/* Add action buttons */}
+      <div className="p-4 border-t border-gray-100 flex justify-end space-x-2">
+        <button
+          onClick={() => onEdit(flow)}
+          className="px-3 py-1 text-sm text-indigo-600 hover:text-indigo-800"
+        >
+          Edit
+        </button>
+        <button
+          onClick={() => {
+            if (window.confirm('Are you sure you want to delete this flow?')) {
+              onDelete(flow.id);
+            }
+          }}
+          className="px-3 py-1 text-sm text-red-600 hover:text-red-800"
+        >
+          Delete
+        </button>
+      </div>
+
     </div>
   );
 };

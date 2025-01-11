@@ -4,8 +4,9 @@ import { updateUserStats } from './users';
 import { UnauthorizedError } from './errors';
 import { validateFlowMetadata, validateFlowData, validateFlowUpdates } from './validation';
 import { createUserDocument } from './users';
-import { collection, getDocs, query, where, orderBy } from 'firebase/firestore';
+import { collection, getDocs, query, where, orderBy, doc, updateDoc, getDoc  } from 'firebase/firestore';
 import { db } from './config';
+
 export async function uploadFlow(file, metadata, userId) {
   try {
     validateFlowMetadata(metadata);
@@ -24,7 +25,7 @@ export async function uploadFlow(file, metadata, userId) {
           date: metadata.tournamentDate || null,
         },
         round: metadata.round || null,
-        team: metadata.team || null,
+        team: metadata.team.trim().toLowerCase() || null,
         tags: Array.isArray(metadata.tags) ? metadata.tags : [], // Ensure tags is an array
         judge: metadata.judge || null,
         division: metadata.division || null,
@@ -131,44 +132,65 @@ export async function getUserFlows(userId, filters = {}) {
 }
 
 export async function deleteFlow(flowId, userId) {
-  try {
-    // Get the flow document first
-    const flow = await getDocument('flows', flowId);
-    
-    if (flow.userId !== userId) {
-      throw new UnauthorizedError('User is not authorized to delete this flow');
+    try {
+      // Get the flow document first to check authorization and get file URL
+      const flow = await getDocument('flows', flowId);
+      
+      // Check if user owns the flow
+      if (flow.userId !== userId) {
+        throw new UnauthorizedError('Only the owner can delete this flow');
+      }
+  
+      // Delete the file from storage if it exists
+      if (flow.fileUrl) {
+        await deleteFileFromStorage(flow.fileUrl);
+      }
+
+      if (flow.tournament?.id) {
+        await removeFlowFromTournament(flow.tournament.id, flowId, userId);
+      }
+  
+      // Delete the flow document
+      await deleteDocument('flows', flowId);
+      return true;
+    } catch (error) {
+      console.error('Error deleting flow:', error);
+      throw error;
     }
-
-    // Delete from storage
-    await deleteFileFromStorage(`flows/${userId}/${flow.fileName}`);
-    
-    // Delete the document
-    await deleteDocument('flows', flowId);
-
-    return true;
-  } catch (error) {
-    console.error('Error deleting flow:', error);
-    throw error;
   }
-}
-
-export async function updateFlow(flowId, userId, updates) {
-  try {
-    const flow = await getDocument('flows', flowId);
+  
+  export async function updateFlow(flowId, updates, userId) {
+    try {
+      
+      // First check if the document exists
+      const flowRef = doc(db, 'flows', flowId);
+      const flowSnap = await getDoc(flowRef);
     
-    if (flow.userId !== userId) {
-      throw new UnauthorizedError('User is not authorized to modify this flow');
+      if (!flowSnap.exists()) {
+        throw new Error('Flow not found');
+      }
+
+      const flowData = flowSnap.data();
+      
+      // Check if user owns the flow
+    if (flowData.userId !== userId) {
+        throw new Error('Only the owner can update this flow');
+      }
+  
+      // Add timestamp and preserve existing data
+      const updatedFlow = {
+        ...flowData,
+        ...updates,
+        updatedAt: new Date(),
+      };
+  
+      await updateDoc(flowRef, updatedFlow);
+      return true;
+    } catch (error) {
+      console.error('Error updating flow:', error);
+      throw error;
     }
-
-    validateFlowUpdates(updates);
-    await updateDocument('flows', flowId, updates);
-
-    return true;
-  } catch (error) {
-    console.error('Error updating flow:', error);
-    throw error;
   }
-}
 
 // src/lib/firebase/flows.js
 
@@ -176,21 +198,24 @@ export async function getFilteredFlows(userId, filters) {
   try {
     let q = query(
       collection(db, 'flows'),
-      where('userId', '==', userId)
+      where('userId', '==', userId),
+      where('status', '==', 'active')
     );
 
     // Add filters based on provided criteria
-    if (filters.tournament) {
-      q = query(q, where('tournament', '==', filters.tournament));
-    }
+    // if (filters.tournament?.trim()) {
+    //   q = query(q, where('tournament.name', '==', filters.tournament));
+    // }
 
     if (filters.round) {
       q = query(q, where('round', '==', filters.round));
     }
 
-    if (filters.team) {
-      q = query(q, where('team', '==', filters.team));
-    }
+    // if (filters.team?.trim()) {
+    //     console.log('Team filter:', filters.team.trim().toLowerCase());
+    //     const teamQuery = filters.team.trim().toLowerCase();
+    //     q = query(q, where('team', '==', teamQuery));
+    //   }
 
     if (filters.division) {
       q = query(q, where('division', '==', filters.division));
@@ -216,11 +241,46 @@ export async function getFilteredFlows(userId, filters) {
     // Always sort by createdAt in descending order
     q = query(q, orderBy('createdAt', 'desc'));
 
+    // Get the documents
     const querySnapshot = await getDocs(q);
-    return querySnapshot.docs.map(doc => ({
+    let flows = querySnapshot.docs.map(doc => ({
       id: doc.id,
       ...doc.data()
     }));
+
+    // Apply team filter client-side
+    if (filters.team?.trim()) {
+      const teamSearch = filters.team.trim().toLowerCase();
+      flows = flows.filter(flow => 
+        flow.team?.toLowerCase().includes(teamSearch)
+      );
+    }
+
+    if (filters.judge?.trim()) {
+      const judgeSearch = filters.judge.trim().toLowerCase();
+      flows = flows.filter(flow =>
+        flow.judge?.toLowerCase().includes(judgeSearch)
+      );
+    }
+
+    if (filters.title?.trim()) {
+      const titleSearch = filters.title.trim().toLowerCase();
+      flows = flows.filter(flow =>
+        flow.title?.toLowerCase().includes(titleSearch)
+      );
+    }
+
+    if (filters.tournament?.trim()) {
+        const tournamentSearch = filters.tournament.trim().toLowerCase();
+        flows = flows.filter(flow =>
+            flow.tournament?.name?.toLowerCase().includes(tournamentSearch)
+        );
+    }
+
+    return flows;
+
+
+    
   } catch (error) {
     console.error('Error getting filtered flows:', error);
     throw error;

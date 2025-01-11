@@ -108,31 +108,53 @@ import { db } from '../lib/firebase/config';
 const Leaderboard = () => {
   const [users, setUsers] = useState([]);
 
+//   useEffect(() => {
+//     const fetchUsers = async () => {
+//       try {
+//         const usersQuery = query(
+//           collection(db, 'users'),
+//           orderBy('treesSpared', 'desc')
+//         );
+        
+//         const querySnapshot = await getDocs(usersQuery);
+//         const usersData = querySnapshot.docs.map(doc => ({
+//           id: doc.id,
+//           ...doc.data(),
+//           // Ensure numerical values are valid
+//           treesSpared: parseFloat(doc.data().treesSpared) || 0,
+//           totalFlows: parseInt(doc.data().totalFlows) || 0
+//         }));
+        
+//         setUsers(usersData);
+//       } catch (error) {
+//         console.error('Error fetching users:', error);
+//       }
+//     };
+
+//     fetchUsers();
+//   }, []);
+
+
   useEffect(() => {
-    const fetchUsers = async () => {
+    const fetchLeaderboardData = async () => {
+    //   setLoading(true);
       try {
-        const usersQuery = query(
-          collection(db, 'users'),
-          orderBy('treesSpared', 'desc')
-        );
-        
-        const querySnapshot = await getDocs(usersQuery);
-        const usersData = querySnapshot.docs.map(doc => ({
+        const usersRef = collection(db, 'users');
+        const q = query(usersRef, orderBy('totalFlows', 'desc'));
+        const snapshot = await getDocs(q);
+        const userData = snapshot.docs.map(doc => ({
           id: doc.id,
-          ...doc.data(),
-          // Ensure numerical values are valid
-          treesSpared: parseFloat(doc.data().treesSpared) || 0,
-          totalFlows: parseInt(doc.data().totalFlows) || 0
+          ...doc.data()
         }));
-        
-        setUsers(usersData);
+        setUsers(userData);
       } catch (error) {
-        console.error('Error fetching users:', error);
-      }
+        console.error('Error fetching leaderboard:', error);
+      } 
     };
 
-    fetchUsers();
+    fetchLeaderboardData();
   }, []);
+
 
   const calculateCO2Saved = (sheets) => {
     return (sheets * 0.006).toFixed(2); // kg of CO2 saved

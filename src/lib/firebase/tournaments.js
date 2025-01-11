@@ -4,7 +4,7 @@ import { validateTournamentData } from './validation';
 
 export async function createTournament(tournamentData, userId) {
   try {
-    validateTournamentData(tournamentData);
+    // validateTournamentData(tournamentData);
     
     const tournament = {
       ...tournamentData,
@@ -37,46 +37,57 @@ export async function getUserTournaments(userId) {
 }
 
 export async function addFlowToTournament(tournamentId, flowId, userId) {
-  try {
-    const tournament = await getDocument('tournaments', tournamentId);
-    
-    // Check authorization
-    if (!tournament.participants.includes(userId)) {
-      throw new UnauthorizedError('User is not a participant in this tournament');
-    }
-
-    // Avoid duplicate flows
-    if (tournament.flows.includes(flowId)) {
+    try {
+      const tournament = await getDocument('tournaments', tournamentId);
+      
+      // Check if flow already exists
+      if (!tournament.flows) {
+        tournament.flows = [];
+      }
+      
+      if (tournament.flows.includes(flowId)) {
+        return true;
+      }
+  
+      // Add flow ID to array
+      const flows = [...tournament.flows, flowId];
+      
+      // Update tournament document with new flows array
+      await updateDocument('tournaments', tournamentId, { 
+        flows,
+        updatedAt: new Date()
+      });
+      
       return true;
+    } catch (error) {
+      console.error('Error adding flow to tournament:', error);
+      throw error;
     }
-
-    const flows = [...tournament.flows, flowId];
-    await updateDocument('tournaments', tournamentId, { flows });
-    return true;
-  } catch (error) {
-    console.error('Error adding flow to tournament:', error);
-    throw error;
   }
-}
-
-export async function removeFlowFromTournament(tournamentId, flowId, userId) {
-  try {
-    const tournament = await getDocument('tournaments', tournamentId);
-    
-    // Check authorization
-    if (!tournament.participants.includes(userId)) {
-      throw new UnauthorizedError('User is not a participant in this tournament');
+  
+  export async function removeFlowFromTournament(tournamentId, flowId, userId) {
+    try {
+      const tournament = await getDocument('tournaments', tournamentId);
+      
+      if (!tournament.flows) {
+        return true;
+      }
+  
+      // Remove flow ID from array
+      const flows = tournament.flows.filter(id => id !== flowId);
+      
+      // Update tournament document
+      await updateDocument('tournaments', tournamentId, { 
+        flows,
+        updatedAt: new Date()
+      });
+      
+      return true;
+    } catch (error) {
+      console.error('Error removing flow from tournament:', error);
+      throw error;
     }
-
-    const flows = tournament.flows.filter(id => id !== flowId);
-    
-    await updateDocument('tournaments', tournamentId, { flows });
-    return true;
-  } catch (error) {
-    console.error('Error removing flow from tournament:', error);
-    throw error;
   }
-}
 
 export async function updateTournament(tournamentId, updates, userId) {
   try {

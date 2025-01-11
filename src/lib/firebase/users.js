@@ -1,7 +1,8 @@
-import { doc, setDoc, getDoc } from 'firebase/firestore';
+import { doc, setDoc, getDoc, getDocs, collection, query, where, updateDoc } from 'firebase/firestore';
 import { db } from './config';
 import { getDocument, updateDocument } from './db-operations';
 import { validateUserData, validateProfileUpdates } from './validation';
+
 
 export async function createUserDocument(user) {
   validateUserData(user);
@@ -13,7 +14,7 @@ export async function createUserDocument(user) {
       const userData = {
         displayName: user.displayName,
         email: user.email,
-        photoURL: user.photoURL,
+        photoURL: await user.photoURL ||'/public/download.png' ,
         createdAt: new Date(),
         updatedAt: new Date(),
         totalFlows: 0,
@@ -29,17 +30,59 @@ export async function createUserDocument(user) {
   }
 }
 
-export async function updateUserStats(userId, pageCount) {
-  try {
-    const user = await getDocument('users', userId);
-    await updateDocument('users', userId, {
-      totalFlows: (user.totalFlows || 0) + 1,
-      treesSpared: (user.treesSpared || 0) + (pageCount * 0.0001) // Approximate paper saved
-    });
-  } catch (error) {
-    console.error('Error updating user stats:', error);
-    throw error;
-  }
+// export async function updateUserStats(userId, pageCountDelta) {
+//     try {
+//         const userRef = doc(db, 'users', userId);
+//         const userSnap = await getDoc(userRef);
+//         const userData = userSnap.data();
+
+//         if (!userData) return;
+
+//         const newTotalFlows = Math.max(0, (userData.totalFlows || 0) + Math.sign(pageCountDelta));
+//         const newTreesSpared = Math.max(0, (userData.treesSpared || 0) + (pageCountDelta * 0.0001));
+
+//         await updateDoc(userRef, {
+//             totalFlows: newTotalFlows,
+//             treesSpared: newTreesSpared,
+//             updatedAt: new Date()
+//         });
+//     } catch (error) {
+//         console.error('Error updating user stats:', error);
+//         throw error;
+//     }
+//     }
+
+export async function updateUserStats(userId) {
+    try {
+        // Get user reference
+        const userRef = doc(db, 'users', userId);
+        
+        // Count total flows for this user from flows collection
+        const flowsRef = collection(db, 'flows');
+        const q = query(flowsRef, where('userId', '==', userId));
+        const querySnapshot = await getDocs(q);
+        
+        // Calculate total flows and pages
+        const totalFlows = querySnapshot.size;
+        let totalPages = 0;
+        querySnapshot.forEach(doc => {
+            const flow = doc.data();
+            totalPages += flow.pageCount || 1;
+            
+        });
+
+        // Update user document with actual counts
+        await updateDoc(userRef, {
+            totalFlows: totalFlows,
+            treesSpared: totalPages * 0.0001,
+            updatedAt: new Date()
+        });
+
+        return { totalFlows, totalPages };
+    } catch (error) {
+        console.error('Error updating user stats:', error);
+        throw error;
+    }
 }
 
 export async function getUserProfile(userId) {

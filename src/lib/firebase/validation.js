@@ -28,7 +28,7 @@ export function validateTournamentData(data) {
   if (!data.date) throw new ValidationError('Tournament date is required');
   if (!data.location) throw new ValidationError('Tournament location is required');
   
-  if (typeof data.name !== 'st ring') { 
+  if (typeof data.name !== 'string') {
     throw new ValidationError('Tournament name must be a string');
   }
   
@@ -40,21 +40,21 @@ export function validateTournamentData(data) {
     throw new ValidationError('Tournament location must be a string');
   }
   
-  return true; 
+  return true;
 }
 
 export function validateUserData(user) {
-  if (!user.uid) throw new ValidationError('User  ID is required');
+  if (!user.uid) throw new ValidationError('User ID is required');
   if (!user.email) throw new ValidationError('User email is required');
   if (typeof user.email !== 'string' || !user.email.includes('@')) {
-    throw new ValidationError('Invalid emai l format');
+    throw new ValidationError('Invalid email format');
   }
   return true;
 }
 
 export function validateFlowData(flowData) {
   if (!flowData.title) throw new ValidationError('Title is required');
-  if (!flowData.userId) throw new ValidationError('User ID is r equired');
+  if (!flowData.userId) throw new ValidationError('User ID is required');
   if (!flowData.fileUrl) throw new ValidationError('File URL is required');
   return true;
 }
@@ -77,7 +77,7 @@ export function validateFlowMetadata(metadata) {
 }
 
 export function validateFlowUpdates(updates) {
-  const allowedFields = ['title', 'tournament', 'round', 'team', 'tags'];
+  const allowedFields = ['title', 'tournament', 'round', 'team', 'tags', 'judge', 'division', 'userId', 'updatedAt' ];
   const invalidFields = Object.keys(updates).filter(field => !allowedFields.includes(field));
   
   if (invalidFields.length > 0) {
@@ -98,6 +98,22 @@ export function validateFlowUpdates(updates) {
   
   if (updates.tags && !Array.isArray(updates.tags)) {
     throw new ValidationError('Tags must be an array');
+  }
+
+  if (updates.judge && typeof updates.judge !== 'string') {
+    throw new ValidationError('Judge must be a string');
+  }
+
+  if (updates.division && typeof updates.division !== 'string') {
+    throw new ValidationError('Division must be a string');
+  }
+
+  if (updates.userId && typeof updates.userId !== 'string') {
+    throw new ValidationError('User ID must be a string');
+  }
+
+  if (updates.updatedAt && !(updates.updatedAt instanceof Date)) {
+    throw new ValidationError('Updated at must be a Date object');
   }
   
   return true;

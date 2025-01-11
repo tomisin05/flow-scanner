@@ -200,7 +200,7 @@
 
 // src/components/FilterBar.jsx
 import React, { useState, useCallback } from 'react';
-import { FiFilter, FiCalendar, FiTag, FiUsers, FiAward } from 'react-icons/fi';
+import { FiFilter, FiCalendar, FiTag, FiUsers, FiAward, FiFileText } from 'react-icons/fi';
 
 const FilterBar = ({ onFilterChange }) => {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -209,6 +209,7 @@ const FilterBar = ({ onFilterChange }) => {
     round: '',
     team: '',
     judge: '',
+    title: '',
     division: '',
     tags: [],
     startDate: '',
@@ -216,13 +217,23 @@ const FilterBar = ({ onFilterChange }) => {
   });
 
   // Predefined options
-  const rounds = ['Round 1', 'Round 2', 'Round 3', 'Round 4', 'Quarters', 'Semis', 'Finals'];
+  const rounds = ['Round 1', 'Round 2', 'Round 3', 'Round 4', 'Round 5', 'Round 6', 'Round 7', 'Round 8', 'Quarters', 'Semis', 'Finals'];
   const divisions = ['Varsity', 'JV', 'Novice'];
   const commonTags = ['K', 'DA', 'CP', 'Case', 'Theory', 'T', 'Framework'];
 
   // Debounced filter change handler
   const handleFilterChange = useCallback((field, value) => {
-    const newFilters = { ...filters, [field]: value.toLowerCase() };
+    let newFilters = { ...filters };
+    console.log('Filters being applied:', filters);
+    if (field === 'tournament') {
+      // Handle tournament name specifically
+      newFilters[field] = value?.trim() || '';
+    } else {
+      newFilters[field] = value;
+    }
+    // console.log('Tournament value:', filters.tournament?.trim());
+    // console.log('Team value:', filters.team?.trim());
+
     setFilters(newFilters);
     onFilterChange(newFilters);
   }, [filters, onFilterChange]);
@@ -234,6 +245,7 @@ const FilterBar = ({ onFilterChange }) => {
       round: '',
       team: '',
       judge: '',
+      title: '',
       division: '',
       tags: [],
       startDate: '',
@@ -349,6 +361,36 @@ const FilterBar = ({ onFilterChange }) => {
                 value={filters.team}
                 onChange={(e) => handleFilterChange('team', e.target.value)}
               />
+            </div>
+
+            {/* Judge Filter */}
+            <div className="space-y-2">
+            <label className="flex items-center text-sm font-medium text-gray-700">
+                <FiUsers className="mr-2 text-indigo-500" />
+                Judge
+            </label>
+            <input
+                type="text"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                placeholder="Enter judge name"
+                value={filters.judge}
+                onChange={(e) => handleFilterChange('judge', e.target.value)}
+            />
+            </div>
+
+            {/* Title Filter */}
+            <div className="space-y-2">
+            <label className="flex items-center text-sm font-medium text-gray-700">
+                <FiFileText className="mr-2 text-indigo-500" />
+                Title
+            </label>
+            <input
+                type="text"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                placeholder="Enter flow title"
+                value={filters.title}
+                onChange={(e) => handleFilterChange('title', e.target.value)}
+            />
             </div>
 
             {/* Date Range Filters */}

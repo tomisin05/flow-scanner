@@ -312,16 +312,19 @@ import { collection, addDoc } from 'firebase/firestore';
 import { db } from '../lib/firebase/config';
 import FlowUpload from '../components/FlowUpload'; // Import your FlowUpload component
 import { useAuth } from '../contexts/AuthContext';
-import { getUserFlows } from '../lib/firebase/flows';
+// import { getUserFlows } from '../lib/firebase/flows';
 import FilterBar from '/src/components/FilterBar.jsx';
 import FlowCard from '/src/components/FlowCard.jsx';
-import { getFilteredFlows } from '../lib/firebase/flows';
+import { getFilteredFlows, updateFlow, deleteFlow  } from '../lib/firebase/flows';
+import EditFlowModal from '../components/EditFlowModal';
+import { updateUserStats } from '../lib/firebase/users';
 
 function Dashboard() {
     const { user } = useAuth();
     const [flows, setFlows] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [showUploadModal, setShowUploadModal] = useState(false);
+    const [editingFlow, setEditingFlow] = useState(null);
     const [filters, setFilters] = useState({
       tournament: '',
       round: '',
@@ -335,26 +338,34 @@ function Dashboard() {
 
 
   const handleFlowSubmit = async (flowData) => {
-    try {
-      // Create flow document in Firestore
-      const docRef = await addDoc(collection(db, 'flows'), {
-        ...flowData,
-        createdAt: new Date()
-      });
-      
-      // Update local state with new flow
-      setFlows(prevFlows => [...prevFlows, { 
-        id: docRef.id, 
-        ...flowData 
-      }]);
+    // try {
+    //   // Create flow document in Firestore
+    //   const docRef = await addDoc(collection(db, 'flows'), {
+    //     ...flowData,
+    //     userId: user.uid,
+    //     createdAt: new Date()
+    //   });
+
+    //   await updateUserStats(user.uid);
+
+    //   setShowUploadModal(false);
+    //   alert('Flow uploaded successfully!');
+
+    //   window.location.reload();
+
+    //   // Update local state with new flow
+    //   setFlows(prevFlows => [...prevFlows, { 
+    //     id: docRef.id, 
+    //     ...flowData 
+    //   }]);
 
       // Close modal after successful upload
-      setShowUploadModal(false);
-
-
-      // Optional: Show success message
-      alert('Flow uploaded successfully!');
-
+      try {
+        // No need to create another document, just update UI
+        setFlows(prevFlows => [...prevFlows, flowData]);
+        setShowUploadModal(false);
+        alert('Flow uploaded successfully!');
+        // window.location.reload();
     } catch (error) {
       console.error('Error uploading flow:', error);
       alert('Failed to upload flow: ' + error.message);
@@ -420,6 +431,45 @@ function Dashboard() {
     });
   };
 
+  // Add delete handler
+  const handleDeleteFlow = async (flowId) => {
+    try {
+      await deleteFlow(flowId, user.uid);
+
+      await updateUserStats(user.uid);    
+      setFlows(flows.filter(flow => flow.id !== flowId));
+      alert('Flow deleted successfully');
+    } catch (error) {
+      console.error('Error deleting flow:', error);
+      alert('Failed to delete flow');
+    }
+  };
+
+  // Add edit handler
+  const handleEditFlow = async (flowId, updates) => {
+    try {
+        const formattedUpdates = {
+            ...updates,
+            tournament: {
+              name: updates.tournament
+            },
+            userId: user.uid // Add this to ensure we maintain the user ID
+          };
+          
+          // Log the flowId and updates for debugging
+          console.log('Updating flow:', flowId, formattedUpdates);
+        
+          await updateFlow(flowId, formattedUpdates, user.uid);
+          // Refresh flows to get updated data
+          const updatedFlows = await getFilteredFlows(user.uid, filters);
+          setFlows(updatedFlows);
+          alert('Flow updated successfully');
+          } catch (error) {
+          console.error('Error updating flow:', error);
+          alert('Failed to update flow');
+        }
+    };
+
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex justify-between items-center mb-8">
@@ -458,7 +508,9 @@ function Dashboard() {
                   Upload Flow
                 </h3>
                 <div className="mt-4 max-h-[80vh] overflow-y-auto">
-                  <FlowUpload onSubmit={handleFlowSubmit} />
+                  <FlowUpload 
+                  userId={user.uid}
+                  onSubmit={handleFlowSubmit} />
                 </div>
               </div>
             </div>
@@ -480,9 +532,22 @@ function Dashboard() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {flows.map((flow) => (
-            <FlowCard key={flow.id} flow={flow} />
+            <FlowCard 
+            key={flow.id} 
+            flow={flow} 
+            onDelete={handleDeleteFlow}
+            onEdit={() => setEditingFlow(flow)}
+            />
           ))}
         </div>
+      )}
+        {/* Add EditFlowModal */}
+        {editingFlow && (
+            <EditFlowModal
+            flow={editingFlow}
+            onClose={() => setEditingFlow(null)}
+            onSave={handleEditFlow}
+            />
       )}
     </div>
   );

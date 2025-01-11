@@ -344,8 +344,12 @@ function FlowUpload({ onSubmit }) {
         pageCount: 1, // Default to 1 for single image uploads
       };
 
-      await uploadFlow(file, uploadMetadata, user.uid);
-    //   onSubmit(flowData);
+      const flowData = await uploadFlow(file, uploadMetadata, user.uid);
+      
+      // Call onSubmit with the returned flow data
+      if (onSubmit) {
+        onSubmit(flowData);
+      }
 
       // Reset form
       setFile(null);
@@ -396,7 +400,7 @@ function FlowUpload({ onSubmit }) {
         </button>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <div className="flow-upload-container"> 
         {/* File Upload or Camera Section */}
         <div className="mb-4">
           {uploadMethod === 'file' ? (
@@ -551,7 +555,7 @@ function FlowUpload({ onSubmit }) {
 
         {/* Submit Button */}
         <button
-          type="submit"
+          onClick={handleSubmit}
           disabled={isLoading}
           className={`w-full px-4 py-2 rounded text-white ${
             isLoading
@@ -561,7 +565,7 @@ function FlowUpload({ onSubmit }) {
         >
           {isLoading ? 'Uploading...' : 'Upload Flow'}
         </button>
-      </form>
+      </div>
     </div>
   );
 }
