@@ -26,7 +26,7 @@ export async function uploadFlow(file, metadata, userId) {
     // If tournament exists, get its ID
     if (!tournamentSnapshot.empty) { 
       const tournamentDoc = tournamentSnapshot.docs[0];
-      tournamentId = tournamentDoc.id;
+      tournamentId = tournamentDoc.id; 
       console.log('Tournament ID', tournamentId) 
       
       // Update tournament's flow count
