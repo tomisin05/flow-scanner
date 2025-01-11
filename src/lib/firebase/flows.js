@@ -46,7 +46,7 @@ export async function uploadFlow(file, metadata, userId) {
     const flowData = {
         userId,
         fileName: file.name,
-        fileUrl: downloadURL,
+        fileUrl: downloadURL, 
         title: metadata.title || file.name,
         tournament: {
             id: tournamentId, // Use the ID of the existing tournament or null if not found
