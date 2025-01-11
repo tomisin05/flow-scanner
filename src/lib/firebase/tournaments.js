@@ -1,10 +1,10 @@
 import { createDocument, getDocument, updateDocument, queryDocuments } from './db-operations';
 import { UnauthorizedError } from './errors';
-// import { validateTournamentData } from './validation';
+import { validateTournamentData } from './validation';
 
 export async function createTournament(tournamentData, userId) {
   try {
-    // validateTournamentData(tournamentData);
+    validateTournamentData(tournamentData);
     
     const tournament = {
       ...tournamentData,

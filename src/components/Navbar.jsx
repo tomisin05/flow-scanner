@@ -35,7 +35,7 @@ return (
     <nav className="bg-white shadow-lg">
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center py-4">
-          <Link to="/" className="text-xl font-bold">Flow Scanner</Link>
+          <Link to="/" className="text-xl font-bold">EcoFlow</Link>
           
           {/* Hamburger button - visible only on mobile */}
           <button
