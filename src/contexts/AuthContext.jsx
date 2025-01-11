@@ -11,22 +11,9 @@ import { createUserDocument } from '../lib/firebase/users';
 
 const AuthContext = createContext();
 
-export function useAuth() {
-  return useContext(AuthContext);
-}
-
-// export function AuthProvider({ children }) {
-//   const [user, setUser] = useState(null);
-//   const [loading, setLoading] = useState(true);
-
-//   function login() {
-//     const provider = new GoogleAuthProvider();
-//     return signInWithPopup(auth, provider);
-//   }
-
-//   function logout() {
-//     return signOut(auth);
-//   }
+  export function useAuth() {
+    return useContext(AuthContext);
+  }
 
   export function AuthProvider({ children }) {
     const [user, setUser] = useState(null);
@@ -56,30 +43,6 @@ export function useAuth() {
       function logout() {
         return signOut(auth);
       }
-    
-  
-    // // Sign up function
-    // const signup = async (email, password) => {
-    //   try {
-    //     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-    //     await createUserDocument(userCredential.user);
-    //     return userCredential.user;
-    //   } catch (error) {
-    //     throw error;
-    //   }
-    // };
-  
-    // // Sign in function
-    // const signin = async (email, password) => {
-    //   try {
-    //     const userCredential = await signInWithEmailAndPassword(auth, email, password);
-    //     await createUserDocument(userCredential.user);
-    //     return userCredential.user;
-    //   } catch (error) {
-    //     throw error;
-    //   }
-    // };
-
 
   const value = {
     user,
@@ -93,17 +56,3 @@ export function useAuth() {
     </AuthContext.Provider>
   );
   }
-
-  function validateUserData(user) {
-    if (!user) {
-      throw new Error('No user provided');
-    }
-    if (!user.uid) {
-      throw new Error('User must have a uid');
-    }
-    // Note: Other fields like displayName, photoURL might be null for new users
-    if (!user.email) {
-      throw new Error('User must have an email');
-    }
-  }
-  
