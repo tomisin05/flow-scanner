@@ -24,7 +24,7 @@ export async function uploadFlow(file, metadata, userId) {
     let tournamentId = null;
     
     // If tournament exists, get its ID
-    if (!tournamentSnapshot.empty) { 
+    if (!tournamentSnapshot.empty) {
       const tournamentDoc = tournamentSnapshot.docs[0];
       tournamentId = tournamentDoc.id;
       console.log('Tournament ID', tournamentId) 
