@@ -30,28 +30,6 @@ export async function createUserDocument(user) {
   }
 }
 
-// export async function updateUserStats(userId, pageCountDelta) {
-//     try {
-//         const userRef = doc(db, 'users', userId);
-//         const userSnap = await getDoc(userRef);
-//         const userData = userSnap.data();
-
-//         if (!userData) return;
-
-//         const newTotalFlows = Math.max(0, (userData.totalFlows || 0) + Math.sign(pageCountDelta));
-//         const newTreesSpared = Math.max(0, (userData.treesSpared || 0) + (pageCountDelta * 0.0001));
-
-//         await updateDoc(userRef, {
-//             totalFlows: newTotalFlows,
-//             treesSpared: newTreesSpared,
-//             updatedAt: new Date()
-//         });
-//     } catch (error) {
-//         console.error('Error updating user stats:', error);
-//         throw error;
-//     }
-//     }
-
 export async function updateUserStats(userId) {
     try {
         // Get user reference
