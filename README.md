@@ -68,7 +68,7 @@ To set up the project locally, follow these steps:
 
 1. Clone the repository:
    ```
-   git clone <repository-url>
+   git clone https://github.com/tomisin05/flow-scanner.git
    cd flow-scan
    ```
 
