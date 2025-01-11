@@ -33,7 +33,7 @@ export async function uploadFlow(file, metadata, userId) {
       const currentFlows = tournamentDoc.data().flows || [];
       console.log('Current Flows', currentFlows)
       await updateDoc(doc(db, 'tournaments', tournamentId), {
-        flows: [...currentFlows, file.name],
+        flows: [...currentFlows, file.name], 
         updatedAt: new Date()
       });
       console.log('Current Flows', currentFlows)
