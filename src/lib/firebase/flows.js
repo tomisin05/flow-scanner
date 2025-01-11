@@ -36,7 +36,7 @@ export async function uploadFlow(file, metadata, userId) {
         flows: [...currentFlows, file.name], 
         updatedAt: new Date()
       });
-      console.log('Current Flows', currentFlows)
+      console.log('Current Flows', currentFlows) 
     }
 
     const storagePath = `flows/${userId}/${file.name}`;
