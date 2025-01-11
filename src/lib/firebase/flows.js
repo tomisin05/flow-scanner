@@ -49,20 +49,20 @@ export async function uploadFlow(file, metadata, userId) {
         fileUrl: downloadURL,  
         title: metadata.title || file.name, 
         tournament: {
-            id: tournamentId, // Use the ID of the ex isting tournament or null if not found
+            id: tournamentId, 
           name: metadata.tournament || null,
           date: metadata.tournamentDate || null,
         },
         round: metadata.round || null,
         team: metadata.team.trim().toLowerCase() || null,
-        tags: Array.isArray(metadata.tags) ? metadata.tags : [], // Ensure tags is an array
+        tags: Array.isArray(metadata.tags) ? metadata.tags : [], 
         judge: metadata.judge || null,
         division: metadata.division || null,
         pageCount: metadata.pageCount || 1,
         fileSize: file.size,
         createdAt: new Date(),
         updatedAt: new Date(),
-        searchableText: createSearchableText(metadata), // For text search
+        searchableText: createSearchableText(metadata), 
         status: 'active'
       };
 
@@ -73,7 +73,6 @@ export async function uploadFlow(file, metadata, userId) {
     const userExists = await checkUserExists(userId);
     
     if (!userExists) {
-      // Create user document if it doesn't exist
       await createUserDocument(userId);
     }
 
@@ -120,7 +119,7 @@ export async function getUserFlows(userId, filters = {}) {
   try {
     const conditions = [
       { field: 'userId', operator: '==', value: userId },
-      { field: 'status', operator: '==', value: 'active' } // Only get active flows
+      { field: 'status', operator: '==', value: 'active' } 
     ];
 
     // Add filter conditions
@@ -221,8 +220,6 @@ export async function deleteFlow(flowId, userId) {
     }
   }
 
-// src/lib/firebase/flows.js
-
 export async function getFilteredFlows(userId, filters) {
   try {
     let q = query(
@@ -231,27 +228,16 @@ export async function getFilteredFlows(userId, filters) {
       where('status', '==', 'active')
     );
 
-    // Add filters based on provided criteria
-    // if (filters.tournament?.trim()) {
-    //   q = query(q, where('tournament.name', '==', filters.tournament));
-    // }
 
     if (filters.round) {
       q = query(q, where('round', '==', filters.round));
     }
-
-    // if (filters.team?.trim()) {
-    //     console.log('Team filter:', filters.team.trim().toLowerCase());
-    //     const teamQuery = filters.team.trim().toLowerCase();
-    //     q = query(q, where('team', '==', teamQuery));
-    //   }
 
     if (filters.division) {
       q = query(q, where('division', '==', filters.division));
     }
 
     if (filters.tags && filters.tags.length > 0) {
-      // Note: You can only use one array-contains clause per query
       q = query(q, where('tags', 'array-contains-any', filters.tags));
     }
 
@@ -277,7 +263,7 @@ export async function getFilteredFlows(userId, filters) {
       ...doc.data()
     }));
 
-    // Apply team filter client-side
+    // Type in Filters
     if (filters.team?.trim()) {
       const teamSearch = filters.team.trim().toLowerCase();
       flows = flows.filter(flow => 
