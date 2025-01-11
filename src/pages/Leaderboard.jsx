@@ -41,7 +41,7 @@ const Leaderboard = () => {
             <p className="text-3xl font-bold text-green-600">
               {users.reduce((sum, user) => sum + user.totalFlows, 0)}
             </p>
-            <p className="text-gray-600">Sheets of Paper Saved</p>
+            <p className="text-gray-600">Sheets of Paper Recycled</p>
           </div>
           <div className="text-center">
             <p className="text-3xl font-bold text-green-600">
@@ -69,7 +69,7 @@ const Leaderboard = () => {
                 Name
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Sheets Saved
+                Sheets Recycled
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Trees Preserved
