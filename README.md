@@ -228,6 +228,7 @@ The EcoFlow application utilizes Firebase as its backend infrastructure. Key res
    - Initializes Firebase app with environment-specific configuration
    - Exports initialized Firebase services (auth, db, storage)
 
+<<<<<<< HEAD
 The application does not use a dedicated infrastructure-as-code solution like CloudFormation or Terraform. Instead, it relies on Firebase's built-in hosting and database services, configured through the Firebase Console and local configuration files.
 
 ## Future Iterations
@@ -251,3 +252,6 @@ The application does not use a dedicated infrastructure-as-code solution like Cl
 - [ ] Add keyboard shortcuts
 - [ ] Create user onboarding flow
 - [ ] Add export functionality for flows
+=======
+The application does not use a dedicated infrastructure-as-code solution like CloudFormation or Terraform. Instead, it relies on Firebase's built-in hosting and database services, configured through the Firebase Console and local configuration files.
+>>>>>>> 1e6813569cd2d6e712fb534cf60145fcf50d672c
