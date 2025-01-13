@@ -83,7 +83,7 @@ function Dashboard() {
       await updateUserStats(user.uid);    
       setFlows(flows.filter(flow => flow.id !== flowId));
       alert('Flow deleted successfully');
-    } catch (error) {
+    } catch (error) { 
       console.error('Error deleting flow:', error);
       alert('Failed to delete flow');
     }
