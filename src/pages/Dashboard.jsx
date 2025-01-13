@@ -68,7 +68,7 @@ function Dashboard() {
       setFlows(filteredFlows);
     } catch (error) { 
       console.error('Error filtering flows:', error);
-      alert('Failed to filter flows');
+      alert('Failed to filter flows'); 
     } finally {  
       setIsLoading(false); 
     }
