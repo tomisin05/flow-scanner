@@ -84,7 +84,7 @@ function Dashboard() {
       setFlows(flows.filter(flow => flow.id !== flowId));
       alert('Flow deleted successfully');
     } catch (error) { 
-      console.error('Error deleting flow:', error);
+      console.error('Error deleting flow:', error); 
       alert('Failed to delete flow');
     }
   };
