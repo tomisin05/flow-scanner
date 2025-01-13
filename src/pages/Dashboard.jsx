@@ -100,7 +100,7 @@ function Dashboard() {
             userId: user.uid  
           };
           
-          // Log the flowId and updates for debugging
+          // Log the flowId and updates for debugging 
           console.log('Updating flow:', flowId, formattedUpdates);
         
           await updateFlow(flowId, formattedUpdates, user.uid);
