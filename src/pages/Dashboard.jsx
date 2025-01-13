@@ -69,7 +69,7 @@ function Dashboard() {
     } catch (error) { 
       console.error('Error filtering flows:', error);
       alert('Failed to filter flows');
-    } finally { 
+    } finally {  
       setIsLoading(false);
     }
   };
