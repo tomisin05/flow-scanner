@@ -47,7 +47,7 @@ function Dashboard() {
       setIsLoading(true); 
       try {
         const flowsData = await getFilteredFlows(user.uid, filters);
-        setFlows(flowsData);
+        setFlows(flowsData); 
       } catch (error) {
         console.error('Error fetching flows:', error);
         alert('Failed to fetch flows');
