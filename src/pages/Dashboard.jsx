@@ -79,7 +79,7 @@ function Dashboard() {
   const handleDeleteFlow = async (flowId) => { 
     try { 
       await deleteFlow(flowId, user.uid); 
-
+ 
       await updateUserStats(user.uid);    
       setFlows(flows.filter(flow => flow.id !== flowId));
       alert('Flow deleted successfully');
