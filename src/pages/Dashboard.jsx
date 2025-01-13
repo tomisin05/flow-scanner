@@ -54,7 +54,7 @@ function Dashboard() {
       } finally { 
         setIsLoading(false);
       }
-    };
+    }; 
     
     fetchFlows();
   }, [user, filters]);
