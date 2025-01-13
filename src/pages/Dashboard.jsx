@@ -93,7 +93,7 @@ function Dashboard() {
   const handleEditFlow = async (flowId, updates)  => { 
     try {
         const formattedUpdates = {
-            ...updates,
+            ...updates, 
             tournament: {
               name: updates.tournament
             },
