@@ -1,5 +1,5 @@
 // src/components/FlowUpload.jsx
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import Webcam from 'react-webcam';
 import { uploadFlow } from '../lib/firebase/flows';
 import { useAuth } from '../contexts/AuthContext';
@@ -27,6 +27,22 @@ function FlowUpload({ onSubmit }) {
   const divisions = ['Varsity', 'JV', 'Novice'];
   const commonTags = ['K', 'DA', 'CP', 'Case', 'Theory', 'T', 'Framework'];
 
+  const [availableTags, setAvailableTags] = useState([...commonTags]);
+
+
+  // Check for custom tags when component mounts
+  useEffect(() => {
+    const loadCustomTags = () => {
+      try {
+        const savedTags = JSON.parse(localStorage.getItem('customTags') || '[]');
+        setAvailableTags(prev => [...new Set([...prev, ...savedTags])]);
+      } catch (error) {
+        console.error('Error loading custom tags:', error);
+      }
+    };
+
+    loadCustomTags();
+  }, []);
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
@@ -53,16 +69,46 @@ function FlowUpload({ onSubmit }) {
     }));
   };
 
-  const handleAddCustomTag = (e) => {
+//   const handleAddCustomTag = (e) => {
+//     e.preventDefault();
+//     if (metadata.customTag && !metadata.tags.includes(metadata.customTag)) {
+//       setMetadata(prev => ({
+//         ...prev,
+//         tags: [...prev.tags, prev.customTag],
+//         customTag: '' // Clear custom tag input
+//       }));
+//     }
+//   };
+
+const handleAddCustomTag = (e) => {
     e.preventDefault();
-    if (metadata.customTag && !metadata.tags.includes(metadata.customTag)) {
+    if (metadata.customTag.trim() && !metadata.tags.includes(metadata.customTag.trim())) {
+      const newTag = metadata.customTag.trim();
+      
+      // Add to available tags if it's not already there
+      if (!availableTags.includes(newTag)) {
+        setAvailableTags(prev => [...prev, newTag]);
+        
+        // Save to localStorage
+        try {
+          const savedTags = JSON.parse(localStorage.getItem('customTags') || '[]');
+          if (!savedTags.includes(newTag)) {
+            localStorage.setItem('customTags', JSON.stringify([...savedTags, newTag]));
+          }
+        } catch (error) {
+          console.error('Error saving custom tag:', error);
+        }
+      }
+
+      // Add to current flow's tags
       setMetadata(prev => ({
         ...prev,
-        tags: [...prev.tags, prev.customTag],
-        customTag: '' // Clear custom tag input
+        tags: [...prev.tags, newTag],
+        customTag: '' // Clear input
       }));
     }
   };
+
 
   const handleCapture = async () => {
     if (!webcamRef.current) return;
@@ -270,16 +316,18 @@ function FlowUpload({ onSubmit }) {
             <label className="block text-sm font-medium text-gray-700">
               Tags
             </label>
-            <div className="flex flex-wrap gap-2 mt-2">
-              {commonTags.map((tag) => (
+          </div>
+
+        <div className="flex flex-wrap gap-2 mb-4">
+              {availableTags.map((tag) => (
                 <button
                   key={tag}
                   type="button"
                   onClick={() => handleTagToggle(tag)}
-                  className={`px-4 py-2 rounded ${
+                  className={`px-3 py-1 rounded-full text-sm ${
                     metadata.tags.includes(tag)
-                      ? 'bg-green-500 text-white'
-                      : 'bg-gray-200 text-gray-700'
+                      ? 'bg-blue-500 text-white'
+                      : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
                   }`}
                 >
                   {tag}
@@ -287,26 +335,46 @@ function FlowUpload({ onSubmit }) {
               ))}
             </div>
 
-            {/* Custom Tag */}
-            <form onSubmit={handleAddCustomTag} className="mt-4 flex">
+            {/* Custom Tag Input */}
+            <div className="flex gap-2">
               <input
                 type="text"
-                name="customTag"
-                placeholder="Add Custom Tag"
                 value={metadata.customTag}
-                onChange={(e) =>
-                  handleMetadataChange('customTag', e.target.value)
-                }
-                className="flex-grow px-4 py-2 rounded border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                onChange={(e) => handleMetadataChange('customTag', e.target.value)}
+                placeholder="Add custom tag"
+                className="flex-1 px-3 py-2 border rounded-md"
               />
               <button
-                type="submit"
-                className="ml-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                type="button"
+                onClick={handleAddCustomTag}
+                className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
               >
-                Add
+                Add Tag
               </button>
-            </form>
-          </div>
+            </div>
+
+            {/* Selected Tags Display */}
+            <div className="mt-4">
+              <p className="text-sm text-gray-600 mb-2">Selected Tags:</p>
+              <div className="flex flex-wrap gap-2">
+                {metadata.tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="inline-flex items-center px-3 py-1 rounded-full bg-blue-100 text-blue-800"
+                  >
+                    {tag}
+                    <button
+                      type="button"
+                      onClick={() => handleTagToggle(tag)}
+                      className="ml-2 text-blue-600 hover:text-blue-800"
+                    >
+                      ×
+                    </button>
+                  </span>
+                ))}
+              </div>
+            </div>
+          
         </div>
 
         {/* Submit Button */}

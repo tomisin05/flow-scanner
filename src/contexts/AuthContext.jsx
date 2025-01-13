@@ -9,7 +9,7 @@ import { auth } from '../lib/firebase/config';
 import { createUserDocument } from '../lib/firebase/users';
 
 
-const AuthContext = createContext();
+export const AuthContext = createContext();
 
   export function useAuth() {
     return useContext(AuthContext);
@@ -20,7 +20,7 @@ const AuthContext = createContext();
     const [loading, setLoading] = useState(true);
   
     useEffect(() => {
-      const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      const unsubscribe = auth.onAuthStateChanged( async (user) => {
         if (user) {
           try {
             await createUserDocument(user);

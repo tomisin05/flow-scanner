@@ -6,6 +6,7 @@ import { validateFlowMetadata, validateFlowData, validateFlowUpdates } from './v
 import { createUserDocument } from './users';
 import { collection, getDocs, query, where, orderBy, doc, updateDoc, getDoc  } from 'firebase/firestore';
 import { db } from './config';
+import { removeFlowFromTournament } from './tournaments';
 
 export async function uploadFlow(file, metadata, userId) {
   try {
@@ -220,7 +221,7 @@ export async function deleteFlow(flowId, userId) {
     }
   }
 
-export async function getFilteredFlows(userId, filters) {
+export async function getFilteredFlows(userId, filters = {} ) {
   try {
     let q = query(
       collection(db, 'flows'),
@@ -257,11 +258,13 @@ export async function getFilteredFlows(userId, filters) {
     q = query(q, orderBy('createdAt', 'desc'));
 
     // Get the documents
+    console.log('Query: ', q)
     const querySnapshot = await getDocs(q);
     let flows = querySnapshot.docs.map(doc => ({
       id: doc.id,
       ...doc.data()
     }));
+    console.log('Flows: ', flows)
 
     // Type in Filters
     if (filters.team?.trim()) {
