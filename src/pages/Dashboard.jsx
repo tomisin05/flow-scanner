@@ -87,7 +87,7 @@ function Dashboard() {
       console.error('Error deleting flow:', error); 
       alert('Failed to delete flow'); 
     }
-  };
+  }; 
 
   // Add edit handler
   const handleEditFlow = async (flowId, updates) => {
