@@ -66,7 +66,7 @@ function Dashboard() {
     try {
       const filteredFlows = await getFilteredFlows(user.uid, newFilters);
       setFlows(filteredFlows);
-    } catch (error) {
+    } catch (error) { 
       console.error('Error filtering flows:', error);
       alert('Failed to filter flows');
     } finally {
