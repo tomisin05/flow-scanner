@@ -51,7 +51,7 @@ function Dashboard() {
       } catch (error) {
         console.error('Error fetching flows:', error);
         alert('Failed to fetch flows');
-      } finally {
+      } finally { 
         setIsLoading(false);
       }
     };
