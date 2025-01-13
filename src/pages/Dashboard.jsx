@@ -85,7 +85,7 @@ function Dashboard() {
       alert('Flow deleted successfully');
     } catch (error) { 
       console.error('Error deleting flow:', error); 
-      alert('Failed to delete flow');
+      alert('Failed to delete flow'); 
     }
   };
 
