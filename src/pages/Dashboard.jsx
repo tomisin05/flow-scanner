@@ -61,7 +61,7 @@ function Dashboard() {
 
 
   
-  const handleFilterChange = async (newFilters) => {
+  const handleFilterChange = async (newFilters) => { 
     setIsLoading(true);
     try {
       const filteredFlows = await getFilteredFlows(user.uid, newFilters);
