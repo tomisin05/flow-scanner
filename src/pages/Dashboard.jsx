@@ -37,7 +37,7 @@ function Dashboard() {
       console.error('Error uploading flow:', error);
       alert('Failed to upload flow: ' + error.message);
     }
-  };
+  }; 
 
   // Fetch flows when filters change
   useEffect(() => {
