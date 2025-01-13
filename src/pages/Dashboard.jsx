@@ -90,7 +90,7 @@ function Dashboard() {
   }; 
 
   // Add edit handler
-  const handleEditFlow = async (flowId, updates) => {
+  const handleEditFlow = async (flowId, updates) => { 
     try {
         const formattedUpdates = {
             ...updates,
