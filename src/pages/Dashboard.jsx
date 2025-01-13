@@ -44,7 +44,7 @@ function Dashboard() {
     if (!user?.uid) return;
 
     const fetchFlows = async () => {
-      setIsLoading(true);
+      setIsLoading(true); 
       try {
         const flowsData = await getFilteredFlows(user.uid, filters);
         setFlows(flowsData);
