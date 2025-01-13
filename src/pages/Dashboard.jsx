@@ -97,7 +97,7 @@ function Dashboard() {
             tournament: {
               name: updates.tournament
             },
-            userId: user.uid  
+            userId: user.uid   
           };
           
           // Log the flowId and updates for debugging 

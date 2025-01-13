@@ -3,6 +3,10 @@ import { collection, query, getDocs, addDoc } from 'firebase/firestore';
 import { db } from '../lib/firebase/config';
 import { useAuth } from '../contexts/AuthContext';
 import FlowUpload from '../components/FlowUpload';
+import EditTournamentModal from './EditTournamentModal';
+import { Timestamp } from 'firebase/firestore';
+import { getDocument, updateDocument } from '../lib/firebase/db-operations';
+import { updateTournament, deleteTournament } from '../lib/firebase/tournaments';
 
 export default function Tournaments() {
   const { user } = useAuth();
@@ -11,9 +15,10 @@ export default function Tournaments() {
   const [error, setError] = useState(null);
   const [selectedTournament, setSelectedTournament] = useState(null);
   const [showCreateForm, setShowCreateForm] = useState(false);
+  const [editingTournament, setEditingTournament] = useState(null);
   const [newTournament, setNewTournament] = useState({
     name: '',
-    date: '',
+    date: new Date(),
     location: '',
     description: ''
   });
@@ -35,6 +40,7 @@ export default function Tournaments() {
         // Sort tournaments by date
         tournamentsData.sort((a, b) => b.date.toDate() - a.date.toDate());
         setTournaments(tournamentsData);
+        console.log('Tournaments Data: ', tournamentsData)
       } catch (err) {
         setError('Error fetching tournaments');
         console.error('Error fetching tournaments:', err);
@@ -67,7 +73,7 @@ export default function Tournaments() {
 
       const tournamentData = {
         name: newTournament.name.trim(),
-        date: tournamentDate,
+        date: Timestamp.fromDate(tournamentDate),
         location: newTournament.location.trim(),
         description: newTournament.description?.trim() || '',
         flows: [],
@@ -77,7 +83,7 @@ export default function Tournaments() {
         // Remove participants array since everyone can access
         isPublic: true // Add this flag to indicate it's public
       };
-
+      tournamentData.date.seconds + 6000000; 
       const docRef = await addDoc(collection(db, 'tournaments'), tournamentData);
       
       setTournaments(prev => [...prev, { 
@@ -100,8 +106,46 @@ export default function Tournaments() {
     }
   };
 
+  const handleEdit = async (tournamentId, updates) => {
+    try {
+        const updatedTournament = await updateTournament(tournamentId, updates, user.uid);
+        console.log('Tournament updated successfully:', updatedTournament);
+        // Update local state
+        setTournaments(prevTournaments => 
+        prevTournaments.map(tournament => 
+            tournament.id === tournamentId ? updatedTournament : tournament
+        )
+        );
+        alert('Tournament updated successfully!');
+    } catch (error) {
+        console.error('Error updating tournament:', error);
+        alert(error.message);
+    }
+    };
+
+
+  const handleDelete = async (tournamentId) => {
+    if (!window.confirm('Are you sure you want to delete this tournament?')) {
+      return;
+    }
+
+    try {
+      await deleteTournament(tournamentId, user.uid);
+      setTournaments(prev => prev.filter(t => t.id !== tournamentId));
+    } catch (error) {
+      console.error('Error deleting tournament:', error);
+      setError(error.message);
+    }
+  };
+
+
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto px-4 py-8">
+    {error && (
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+        {error}
+      </div>
+    )}
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Tournaments</h1>
         <button
@@ -112,11 +156,11 @@ export default function Tournaments() {
         </button>
       </div>
 
-      {error && (
+      {/* {error && (
         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
           {error}
         </div>
-      )}
+      )} */}
 
       {showCreateForm && (
         <form onSubmit={handleCreateTournament} className="mb-8 space-y-4 bg-white p-6 rounded-lg shadow">
@@ -189,6 +233,33 @@ export default function Tournaments() {
               {tournament.description && (
                 <p className="text-gray-600 mb-4">{tournament.description}</p>
               )}
+
+              {tournament.createdBy === user.uid && (
+              <div className="mt-4 flex space-x-2">
+                <button
+                  onClick={() => setEditingTournament(tournament)}
+                  className="px-3 py-1 text-sm text-blue-600 hover:text-blue-800"
+                >
+                  Edit
+                </button>
+                <button
+                  onClick={() => handleDelete(tournament.id)}
+                  className="px-3 py-1 text-sm text-red-600 hover:text-red-800"
+                >
+                  Delete
+                </button>
+              </div>
+            )}
+
+            {editingTournament && (
+                    <EditTournamentModal
+                    tournament={editingTournament}
+                    onClose={() => setEditingTournament(null)}
+                    onSave={handleEdit}
+                    />
+                )}
+
+
               
               <div className="flex justify-between items-center mt-4">
                 <button
