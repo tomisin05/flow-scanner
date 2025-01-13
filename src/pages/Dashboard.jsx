@@ -57,7 +57,7 @@ function Dashboard() {
     }; 
     
     fetchFlows();
-  }, [user, filters]);
+  }, [user, filters]); 
 
 
   
