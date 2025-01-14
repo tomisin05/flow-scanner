@@ -57,7 +57,7 @@ export async function uploadFlow(file, metadata, userId) {
           date: metadata.tournamentDate || null,
         },
         round: metadata.round || null,
-        team: metadata.team.trim().toLowerCase() || null,
+        team: metadata.team.trim() || null,
         tags: Array.isArray(metadata.tags) ? metadata.tags : [], 
         judge: metadata.judge || null,
         division: metadata.division || null,

@@ -7,6 +7,7 @@ import EditTournamentModal from './EditTournamentModal';
 import { Timestamp } from 'firebase/firestore';
 import { getDocument, updateDocument } from '../lib/firebase/db-operations';
 import { updateTournament, deleteTournament } from '../lib/firebase/tournaments';
+import { FiPlus, FiX } from 'react-icons/fi';
 
 export default function Tournaments() {
   const { user } = useAuth();
@@ -172,8 +173,13 @@ export default function Tournaments() {
         <h1 className="text-2xl font-bold">Tournaments</h1>
         <button
           onClick={() => setShowCreateForm(!showCreateForm)} 
-          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+          className=" flex items-center bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
         >
+            {showCreateForm ? (
+            <FiX className="mr-2" />
+          ) : (
+            <FiPlus className="mr-2" />
+          )}
           {showCreateForm ? 'Cancel' : 'Create Tournament'}
         </button> 
       </div>

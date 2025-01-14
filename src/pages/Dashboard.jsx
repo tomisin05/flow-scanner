@@ -6,6 +6,7 @@ import FlowCard from '/src/components/FlowCard.jsx';
 import { getFilteredFlows, updateFlow, deleteFlow  } from '../lib/firebase/flows';
 import EditFlowModal from '../components/EditFlowModal';
 import { updateUserStats } from '../lib/firebase/users';
+import { FiPlus } from 'react-icons/fi';
 
 function Dashboard() {
     const { user } = useAuth();
@@ -120,8 +121,9 @@ function Dashboard() {
         <h1 className="text-3xl font-bold">Your Flows</h1>
         <button
           onClick={() => setShowUploadModal(true)}
-          className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+          className="flex items-center bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
         >
+        <FiPlus className="mr-2" />
           Upload New Flow
         </button>
       </div>

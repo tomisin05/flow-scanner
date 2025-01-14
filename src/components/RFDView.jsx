@@ -100,13 +100,13 @@ const RFDView = ({ rfd }) => {
               <p className="font-medium text-gray-900">{rfd.team}</p>
             </div>
           </div>
-          <div className="flex items-start space-x-3">
+          {/* <div className="flex items-start space-x-3">
             <FiUsers className="mt-1 text-indigo-500" />
             <div>
               <p className="text-sm text-gray-500">Opponent</p>
               <p className="font-medium text-gray-900">{rfd.opponent}</p>
             </div>
-          </div>
+          </div> */}
           <div className="flex items-start space-x-3">
             <FiAward className="mt-1 text-indigo-500" />
             <div>
