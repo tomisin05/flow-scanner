@@ -11,6 +11,7 @@ Key features include:
 - Tournament management and flow organization
 - Leaderboard to track community impact
 - Responsive design for seamless use across devices
+- Reason for Decision (RFD) management and storage
 
 EcoFlow aims to revolutionize how debate flows are managed, making it easier for the debate community to store, access, and analyze their performance data.
 
@@ -26,6 +27,10 @@ EcoFlow aims to revolutionize how debate flows are managed, making it easier for
 │   │   ├── FlowUpload.jsx
 │   │   ├── Layout.jsx
 │   │   ├── Navbar.jsx
+│   │   ├── RFDFilterBar.jsx
+│   │   ├── RFDList.jsx
+│   │   ├── RFDUpload.jsx
+│   │   ├── RFDView.jsx
 │   │   └── Tournaments.jsx
 │   ├── contexts/
 │   │   └── AuthContext.jsx
@@ -34,6 +39,7 @@ EcoFlow aims to revolutionize how debate flows are managed, making it easier for
 │   │       ├── config.js
 │   │       ├── db-operations.js
 │   │       ├── flows.js
+│   │       ├── rfd.js
 │   │       ├── storage-utils.js
 │   │       ├── tournaments.js
 │   │       ├── users.js
@@ -41,7 +47,8 @@ EcoFlow aims to revolutionize how debate flows are managed, making it easier for
 │   ├── pages/
 │   │   ├── Dashboard.jsx
 │   │   ├── Home.jsx
-│   │   └── Leaderboard.jsx
+│   │   ├── Leaderboard.jsx
+│   │   └── RFDPage.jsx
 │   ├── App.css
 │   ├── App.jsx
 │   ├── index.css
@@ -130,6 +137,13 @@ Update the Firebase configuration in `src/lib/firebase/config.js` if needed.
    - Click the "Delete" button on a FlowCard
    - Confirm the deletion when prompted
 
+5. Managing RFDs:
+   - Navigate to the RFD Page
+   - Click "Add New RFD" to create a new Reason for Decision
+   - Fill in the RFD details and submit
+   - Use the RFDFilterBar to search and filter existing RFDs
+   - View, edit, or delete RFDs as needed
+
 ### Testing & Quality
 
 To run linting:
@@ -183,6 +197,9 @@ The EcoFlow application follows a unidirectional data flow pattern. Here's an ov
 3. Data Retrieval
    [Firestore] -> [Firebase Functions] -> [Dashboard/FilterBar] -> [FlowCard]
 
+4. RFD Management
+   [User] -> [RFDPage] -> [RFDUpload/RFDView] -> [Firebase Functions] -> [Firestore]
+
 ```
 +-------------+     +--------------+     +------------------+
 |    User     | --> | AuthContext  | --> |   Firebase Auth  |
@@ -191,13 +208,13 @@ The EcoFlow application follows a unidirectional data flow pattern. Here's an ov
        v                                          v
 +-------------+     +--------------+     +------------------+
 |  Dashboard  | <-> | FlowUpload/  | <-> | Firebase         |
-|             |     | EditFlowModal|     | Functions        |
-+-------------+     +--------------+     +------------------+
-       ^                                          |
+|  RFDPage    |     | EditFlowModal|     | Functions        |
++-------------+     | RFDUpload    |     +------------------+
+       ^            +--------------+              |
        |                                          v
 +-------------+     +--------------+     +------------------+
 | FilterBar   | <-> |   FlowCard   | <-- | Firestore/       |
-|             |     |              |     | Storage          |
+| RFDFilterBar|     |   RFDView    |     | Storage          |
 +-------------+     +--------------+     +------------------+
 ```
 
@@ -215,6 +232,7 @@ The EcoFlow application utilizes Firebase as its backend infrastructure. Key res
      - flows: Stores metadata for uploaded debate flows
      - users: Stores user profile information
      - tournaments: Stores tournament data
+     - rfds: Stores Reason for Decision data
 
 3. Firebase Storage
    - Purpose: Stores uploaded flow files
@@ -233,7 +251,7 @@ The application does not use a dedicated infrastructure-as-code solution like Cl
 ## Future Iterations
 
 ### Feature Enhancements
-- [ x ] Add Reason for Decision (RFD) storage/page
+- [x] Add Reason for Decision (RFD) storage/page
 - [ ] Add batch upload capability for multiple flows
 - [ ] Create team collaboration features
 - [ ] Add flow analytics dashboard
