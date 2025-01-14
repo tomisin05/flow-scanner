@@ -150,7 +150,7 @@ export default function Tournaments() {
     adjustedDate.setDate(adjustedDate.getDate() + 1); 
 
     return adjustedDate.toLocaleDateString('en-US', {
-      year: 'numeric',
+      year: 'numeric', 
       month: 'long',
       day: 'numeric'
     });
