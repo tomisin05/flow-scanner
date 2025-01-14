@@ -233,7 +233,7 @@ The application does not use a dedicated infrastructure-as-code solution like Cl
 ## Future Iterations
 
 ### Feature Enhancements
-- [ ] Add Reason for Decision (RFD) storage/page
+- [ x ] Add Reason for Decision (RFD) storage/page
 - [ ] Add batch upload capability for multiple flows
 - [ ] Create team collaboration features
 - [ ] Add flow analytics dashboard
