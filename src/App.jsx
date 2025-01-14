@@ -5,6 +5,7 @@ import Home from './pages/Home'
 import Dashboard from './pages/Dashboard'
 import Leaderboard from './pages/Leaderboard'
 import Tournaments from './components/Tournaments'
+import RFDPage from './pages/RFDPage'
 import './App.css'
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
             <Route path="dashboard" element={<Dashboard />} />
+            <Route path="rfd" element={<RFDPage />} />
             <Route path="leaderboard" element={<Leaderboard />} />
             <Route path="tournaments" element={<Tournaments />} /> 
           </Route>

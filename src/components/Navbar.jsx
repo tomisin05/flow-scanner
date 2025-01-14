@@ -64,6 +64,7 @@ return (
           <div className="hidden md:flex items-center space-x-4">
             <Link to="/dashboard" className="hover:text-blue-600">Dashboard</Link>
             <Link to="/tournaments" className="hover:text-blue-600">Tournaments</Link>
+            <Link to="/rfd" className="hover:text-blue-600">RFD</Link>
             <Link to="/leaderboard" className="hover:text-blue-600">Leaderboard</Link>
             {user ? (
               <div className="flex items-center space-x-4">
