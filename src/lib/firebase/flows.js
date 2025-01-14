@@ -13,6 +13,7 @@ export async function uploadFlow(file, metadata, userId) {
     validateFlowMetadata(metadata);
     // Upload file to Storage
 
+    
     // First check if tournament exists with this name
     const tournamentsRef = collection(db, 'tournaments');
     const q = query(
@@ -24,22 +25,23 @@ export async function uploadFlow(file, metadata, userId) {
     const tournamentSnapshot = await getDocs(q);
     let tournamentId = null;
     
-    // If tournament exists, get its ID
-    if (!tournamentSnapshot.empty) { 
-      const tournamentDoc = tournamentSnapshot.docs[0];
-      tournamentId = tournamentDoc.id; 
-      console.log('Tournament ID', tournamentId) 
+    // // If tournament exists, get its ID
+    // if (!tournamentSnapshot.empty) { 
+    //   const tournamentDoc = tournamentSnapshot.docs[0];
+    //   tournamentId = tournamentDoc.id; 
+    //   console.log('Tournament ID', tournamentId) 
       
-      // Update tournament's flow count
-      const currentFlows = tournamentDoc.data().flows || [];
-      console.log('Current Flows', currentFlows)
-      await updateDoc(doc(db, 'tournaments', tournamentId), {
-        flows: [...currentFlows, file.name], 
-        updatedAt: new Date()
-      });
-      console.log('Current Flows', currentFlows) 
-    }
+    //   // Update tournament's flow count
+    //   const currentFlows = tournamentDoc.data().flows || [];
+    //   console.log('Current Flows', currentFlows)
+    //   await updateDoc(doc(db, 'tournaments', tournamentId), {
+    //     flows: [...currentFlows, file.name], 
+    //     updatedAt: new Date()
+    //   });
+    //   console.log('Current Flows', currentFlows) 
+    // }
  
+
     const storagePath = `flows/${userId}/${file.name}`;
     const downloadURL = await uploadFileToStorage(file, storagePath);
 
@@ -69,6 +71,27 @@ export async function uploadFlow(file, metadata, userId) {
 
     // Add flow document
     const result = await createDocument('flows', flowData);
+
+    // get flowID
+    const flowId = result.id
+    
+    
+    // If tournament exists, get its ID
+    if (!tournamentSnapshot.empty) { 
+      const tournamentDoc = tournamentSnapshot.docs[0];
+      tournamentId = tournamentDoc.id; 
+      console.log('Tournament ID', tournamentId) 
+      
+      // Update tournament's flow count
+      const currentFlows = tournamentDoc.data().flows || [];
+      console.log('Current Flows', currentFlows)
+      await updateDoc(doc(db, 'tournaments', tournamentId), {
+        flows: [...currentFlows, flowId], 
+        updatedAt: new Date()
+      });
+      console.log('Current Flows', currentFlows) 
+    }
+ 
 
     // First check if user exists
     const userExists = await checkUserExists(userId);
