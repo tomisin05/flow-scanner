@@ -208,7 +208,7 @@ export default function Tournaments() {
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700">Location</label>
-            <input
+            <input 
               type="text"
               value={newTournament.location}
               onChange={(e) => setNewTournament({...newTournament, location: e.target.value})}
