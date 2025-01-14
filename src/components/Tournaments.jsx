@@ -151,7 +151,7 @@ export default function Tournaments() {
 
     return adjustedDate.toLocaleDateString('en-US', {
       year: 'numeric', 
-      month: 'long',
+      month: 'long', 
       day: 'numeric'
     });
     } catch (error) {
