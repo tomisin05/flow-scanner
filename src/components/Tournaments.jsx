@@ -142,7 +142,7 @@ export default function Tournaments() {
       if (!dateString) return 'No date set';
       
       const date = new Date(dateString);
-      if (isNaN(date)) {
+      if (isNaN(date)) { 
         return 'Invalid date';
       }
     // Add one day
