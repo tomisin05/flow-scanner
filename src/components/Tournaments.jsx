@@ -186,7 +186,7 @@ export default function Tournaments() {
 
       {showCreateForm && (
         <form onSubmit={handleCreateTournament} className="mb-8 space-y-4 bg-white p-6 rounded-lg shadow">
-          <div>
+          <div> 
             <label className="block text-sm font-medium text-gray-700">Tournament Name</label>
             <input
               type="text"
