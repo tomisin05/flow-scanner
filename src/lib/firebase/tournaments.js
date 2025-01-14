@@ -91,6 +91,7 @@ export async function addFlowToTournament(tournamentId, flowId, userId) {
   
       // Remove flow ID from array
       const flows = tournament.flows.filter(id => id !== flowId);
+      console.log('Flows: ', flows)
       
       // Update tournament document
       await updateDocument('tournaments', tournamentId, { 
