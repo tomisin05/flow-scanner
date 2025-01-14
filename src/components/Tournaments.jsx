@@ -171,7 +171,7 @@ export default function Tournaments() {
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Tournaments</h1>
         <button
-          onClick={() => setShowCreateForm(!showCreateForm)}
+          onClick={() => setShowCreateForm(!showCreateForm)} 
           className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
         >
           {showCreateForm ? 'Cancel' : 'Create Tournament'}
