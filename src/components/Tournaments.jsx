@@ -167,7 +167,7 @@ export default function Tournaments() {
         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
         {error}
       </div>
-    )}
+    )} 
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Tournaments</h1>
         <button
