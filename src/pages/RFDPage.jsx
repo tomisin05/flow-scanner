@@ -9,7 +9,8 @@ import Modal from '../components/Modal';
 import { FiPlus } from 'react-icons/fi';
 import { getRFDs } from '../lib/firebase/rfd';
 import { deleteRFD } from '../lib/firebase/rfd';
-
+import { useAuth } from '../contexts/AuthContext';
+import { auth } from '../lib/firebase/config';
 
 const RFDPage = () => {
   const [filters, setFilters] = useState({
@@ -26,12 +27,18 @@ const RFDPage = () => {
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [rfds, setRfds] = useState([]);
+  const [error, setError] = useState(null);
+  
+
+  const currentUser= auth.currentUser;
 
   // Fetch RFDs
   const fetchRFDs = async () => {
+    if (!currentUser) return;
+    
+    setIsLoading(true);
     try {
-      setIsLoading(true);
-      const fetchedRFDs = await getRFDs(filters);
+      const fetchedRFDs = await getRFDs(filters, currentUser.uid);
       setRfds(fetchedRFDs);
     } catch (error) {
       console.error('Error fetching RFDs:', error);
@@ -42,7 +49,7 @@ const RFDPage = () => {
 
   useEffect(() => {
     fetchRFDs();
-  }, [filters]); // Re-fetch when filters change
+  }, [currentUser, filters]); // Re-fetch when filters change
 
 
 const handleRFDSubmit = async (rfdData) => {
@@ -61,7 +68,7 @@ const handleRFDSubmit = async (rfdData) => {
         );
       } else {
         // Creating new RFD
-        updatedRFD = await uploadRFD(rfdData);
+        updatedRFD = await uploadRFD(rfdData, currentUser.uid);
         
         // Add the new RFD to the beginning of the list
         setRfds(currentRfds => [updatedRFD, ...currentRfds]);

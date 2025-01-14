@@ -9,17 +9,21 @@ import { auth } from '../lib/firebase/config';
 import { createUserDocument } from '../lib/firebase/users';
 
 
+
 export const AuthContext = createContext();
 
   export function useAuth() {
     return useContext(AuthContext);
   }
 
+  
+
   export function AuthProvider({ children }) {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
   
     useEffect(() => {
+        console.log('Setting up auth listener');
       const unsubscribe = auth.onAuthStateChanged( async (user) => {
         if (user) {
           try {
@@ -28,6 +32,7 @@ export const AuthContext = createContext();
             console.error("Error creating user document:", error);
           }
         }
+        
         setUser(user);
         setLoading(false);
       });
@@ -50,9 +55,12 @@ export const AuthContext = createContext();
     logout
   };
 
+  
+
   return (
     <AuthContext.Provider value={value}>
       {!loading && children}
     </AuthContext.Provider>
   );
   }
+

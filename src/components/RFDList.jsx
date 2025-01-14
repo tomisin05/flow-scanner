@@ -3,11 +3,21 @@ import { useState, useEffect } from 'react';
 import { FiEdit2, FiTrash2, FiEye } from 'react-icons/fi';
 
 import { getRFDs, deleteRFD } from '../lib/firebase/rfd';
+import { auth } from '../lib/firebase/config';
+
 
 const RFDList = ({ rfds, onEdit, onView, onDelete }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  
+  if(auth.auth) {
+    const { currentUser } = auth.auth ;
 
+  console.log('currentUser:', currentUser);
+  }
+  if (!auth.currentUser) {
+    return <div>Please log in to view your RFDs</div>;
+  }
 //   useEffect(() => {
 //     fetchRFDs();
 //   }, [filters]);
