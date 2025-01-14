@@ -157,7 +157,7 @@ export default function Tournaments() {
     } catch (error) {
       console.error('Error formatting date:', error); 
       return 'Error formatting date';
-    }
+    } 
   };
 
 
