@@ -148,7 +148,7 @@ export default function Tournaments() {
     // Add one day
     const adjustedDate = new Date(date);
     adjustedDate.setDate(adjustedDate.getDate() + 1); 
-
+ 
     return adjustedDate.toLocaleDateString('en-US', {
       year: 'numeric', 
       month: 'long', 
