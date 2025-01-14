@@ -4,7 +4,7 @@ import { FiEdit2, FiTrash2, FiEye } from 'react-icons/fi';
 
 import { getRFDs, deleteRFD } from '../lib/firebase/rfd';
 
-const RFDList = ({ rfds, onEdit, onView }) => {
+const RFDList = ({ rfds, onEdit, onView, onDelete }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -28,7 +28,6 @@ const RFDList = ({ rfds, onEdit, onView }) => {
     if (window.confirm('Are you sure you want to delete this RFD?')) {
       try {
         await deleteRFD(rfdId);
-        setRfds(rfds.filter(rfd => rfd.id !== rfdId));
       } catch (err) {
         setError('Failed to delete RFD');
       }
@@ -130,7 +129,7 @@ return (
               <FiEdit2 />
             </button>
             <button
-              onClick={() => handleDelete(rfd.id)}
+              onClick={() => onDelete(rfd.id)}
               className="p-2 text-red-500 hover:text-red-700"
               title="Delete"
             >

@@ -8,6 +8,7 @@ import RFDView from '../components/RFDView';
 import Modal from '../components/Modal';
 import { FiPlus } from 'react-icons/fi';
 import { getRFDs } from '../lib/firebase/rfd';
+import { deleteRFD } from '../lib/firebase/rfd';
 
 
 const RFDPage = () => {
@@ -80,6 +81,20 @@ const handleRFDSubmit = async (rfdData) => {
     setIsUploadModalOpen(true);
   };
 
+  const handleDelete = async (rfdId) => {
+    {
+        (window.confirm('Are you sure you want to delete this RFD?'))
+        try {
+        // Delete the RFD
+        await deleteRFD(rfdId);
+
+        // Update the local state by removing the deleted RFD
+        setRfds(currentRfds => currentRfds.filter(rfd => rfd.id !== rfdId));
+        } catch (error) {
+        console.error('Error deleting RFD:', error);
+        }}
+  };
+
   const rounds = ['Round 1', 'Round 2', 'Round 3', 'Quarter Finals', 'Semi Finals', 'Finals'];
 
   return (
@@ -109,6 +124,7 @@ const handleRFDSubmit = async (rfdData) => {
           setIsViewModalOpen(true);
         }}
         onEdit={handleEdit}
+        onDelete={handleDelete}
       />
 
       {/* Upload Modal */}
