@@ -196,7 +196,7 @@ export default function Tournaments() {
               required 
             />
           </div>
-          <div>
+          <div> 
             <label className="block text-sm font-medium text-gray-700">Date</label>
             <input
               type="date"
