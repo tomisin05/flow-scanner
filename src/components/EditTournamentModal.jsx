@@ -34,7 +34,7 @@ const EditTournamentModal = ({ tournament, onClose, onSave }) => {
 
   const [formData, setFormData] = useState({
     name: tournament?.name || '',
-    date: formatDateForInput(tournament?.date),
+    date: tournament?.date || '',
     location: tournament?.location || '',
     description: tournament?.description || '',
   });
@@ -52,8 +52,8 @@ const EditTournamentModal = ({ tournament, onClose, onSave }) => {
 
 //   const handleSubmit = async (e) => {
 //     e.preventDefault();
-//     setLoading(true);
-//     setError(null);
+    // setLoading(true);
+    // setError(null);
 
 //     try {
 //       await onSave(tournament.id, formData);
@@ -67,16 +67,21 @@ const EditTournamentModal = ({ tournament, onClose, onSave }) => {
 
  const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setError(null);
+
     try {
       const dateObj = new Date(formData.date);
       if (isNaN(dateObj.getTime())) {
         throw new Error('Invalid date');
       }
 
+      const dateString = dateObj.toISOString().split('T')[0];
+
       const updates = {
         ...formData,
-        date: Timestamp.fromDate(dateObj),
-        updatedAt: Timestamp.now()
+        date: dateString,
+        updatedAt: new Date().toISOString()
       };
 
       await onSave(tournament.id, updates);

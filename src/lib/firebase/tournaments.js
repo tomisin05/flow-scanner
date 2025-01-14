@@ -16,7 +16,7 @@ export async function createTournament(tournamentData, userId) {
     
     const tournament = {
       ...tournamentData,
-      date: Timestamp.fromDate(dateObj),
+      date: tournamentData.date,
       flows: [],
       participants: [userId],
       createdBy: userId,
@@ -115,51 +115,28 @@ export async function updateTournament(tournamentId, updates, userId) {
       throw new Error('Tournament not found');
     }
 
-    const tournamentData = tournamentSnap.data();
-
-
-// Convert Firestore Timestamp to a specific timezone
-const tournamentDate = tournamentData.date.toDate(); // Get the Date object
-const options = {
-  timeZone: 'Atlantic/Reykjavik',
-  year: 'numeric',
-  month: '2-digit',
-  day: '2-digit',
-  hour: '2-digit',
-  minute: '2-digit',
-  second: '2-digit',
-  hour12: false,
-};
-
-const formattedDate = new Intl.DateTimeFormat('en-US', options).format(tournamentDate);
-console.log('Tournament Date in NY:', formattedDate);
-    // Check authorization
-    if (tournamentData.createdBy !== userId) {
-      throw new UnauthorizedError('Only the tournament creator can update tournament details');
+    
+    if (tournamentSnap.data().createdBy !== userId) {
+      throw new Error('You do not have permission to edit this tournament');
     }
-    console.log('updates', updates)
 
-     // Convert the date string to a Timestamp
-    //  const updatedData = {
-    //     ...updates,
-    //     date: new Date(updates.date),
-    //     updatedAt: Timestamp.now()
-    //   };
+    // Format date as YYYY-MM-DD string
+    const dateString = new Date(updates.date).toISOString().split('T')[0];
 
-      const updatedData = {
-        ...updates,
-        date: updates.date instanceof Timestamp 
-          ? updates.date
-          : Timestamp.fromDate(new Date(updates.date)),
-        updatedAt: Timestamp.now()
-      };
+    const updatedData = {
+      ...updates,
+      date: dateString,
+      updatedAt: new Date().toISOString()
+    };
+
+    
       console.log("Updated Data:", updatedData);
   
       await updateDoc(tournamentRef, updatedData);
   
     return {
         id: tournamentId,
-        ...tournamentData,
+        
         ...updatedData
     }
   } catch (error) {

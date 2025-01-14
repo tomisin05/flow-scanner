@@ -37,8 +37,8 @@ export default function Tournaments() {
           id: doc.id,
           ...doc.data()
         }));
-        // Sort tournaments by date
-        tournamentsData.sort((a, b) => b.date.toDate() - a.date.toDate());
+        // Sort tournaments by date string
+        tournamentsData.sort((a, b) => new Date(b.date) - new Date(a.date));
         setTournaments(tournamentsData);
         console.log('Tournaments Data: ', tournamentsData)
       } catch (err) {
@@ -66,24 +66,23 @@ export default function Tournaments() {
     }
 
     try {
-      const tournamentDate = new Date(newTournament.date);
-      if (isNaN(tournamentDate)) {
-        throw new Error('Invalid date format');
-      }
+        // Format date as string (YYYY-MM-DD)
+      const dateString = new Date(newTournament.date)
+        .toISOString()
+        .split('T')[0];
 
       const tournamentData = {
         name: newTournament.name.trim(),
-        date: Timestamp.fromDate(tournamentDate),
+        date: dateString,
         location: newTournament.location.trim(),
         description: newTournament.description?.trim() || '',
         flows: [],
         createdBy: user.uid,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        // Remove participants array since everyone can access
-        isPublic: true // Add this flag to indicate it's public
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        isPublic: true
       };
-      tournamentData.date.seconds + 6000000; 
+
       const docRef = await addDoc(collection(db, 'tournaments'), tournamentData);
       
       setTournaments(prev => [...prev, { 
@@ -135,6 +134,29 @@ export default function Tournaments() {
     } catch (error) {
       console.error('Error deleting tournament:', error);
       setError(error.message);
+    }
+  };
+
+  const formatDate = (dateString) => {
+    try {
+      if (!dateString) return 'No date set';
+      
+      const date = new Date(dateString);
+      if (isNaN(date)) {
+        return 'Invalid date';
+      }
+    // Add one day
+    const adjustedDate = new Date(date);
+    adjustedDate.setDate(adjustedDate.getDate() + 1); 
+
+    return adjustedDate.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+    } catch (error) {
+      console.error('Error formatting date:', error);
+      return 'Error formatting date';
     }
   };
 
@@ -225,9 +247,7 @@ export default function Tournaments() {
             >
               <h3 className="text-xl font-semibold mb-2">{tournament.name}</h3>
               <p className="text-gray-600 mb-2">
-                Date: {tournament.date instanceof Date 
-                    ? tournament.date.toLocaleDateString()
-                    : new Date(tournament.date.seconds * 1000).toLocaleDateString()}
+                Date: {formatDate(tournament.date)}
               </p>
               <p className="text-gray-600 mb-2">Location: {tournament.location}</p>
               {tournament.description && (
@@ -271,7 +291,7 @@ export default function Tournaments() {
                   {selectedTournament?.id === tournament.id ? 'Hide Upload' : 'Upload Flow'}
                 </button>
                 <span className="text-sm text-gray-500">
-                  {tournament.flows?.length} flows
+                  {tournament.flows?.length || 0} flows
                 </span>
               </div>
               
