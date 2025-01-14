@@ -144,7 +144,7 @@ export default function Tournaments() {
       const date = new Date(dateString);
       if (isNaN(date)) { 
         return 'Invalid date';
-      }
+      } 
     // Add one day
     const adjustedDate = new Date(date);
     adjustedDate.setDate(adjustedDate.getDate() + 1); 
