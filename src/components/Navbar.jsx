@@ -111,6 +111,13 @@ return (
             >
               Tournaments
             </Link>
+            <Link to="/rfd"
+             className="hover:text-blue-600 px-2 py-1"
+             onClick={() => setIsMenuOpen(false)}
+            >
+                RFD
+            </Link>
+
             <Link 
               to="/leaderboard" 
               className="hover:text-blue-600 px-2 py-1"

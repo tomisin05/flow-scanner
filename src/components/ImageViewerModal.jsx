@@ -101,7 +101,7 @@ const ImageViewerModal = ({ imageUrl, onClose }) => {
             className="text-white bg-black bg-opacity-50 w-10 h-10 flex items-center justify-center rounded-full hover:bg-opacity-75 focus:outline-none"
           >
             <span className="text-2xl">×</span>
-          </button>
+          </button> 
         </div>
         <div className="overflow-auto">
           <img

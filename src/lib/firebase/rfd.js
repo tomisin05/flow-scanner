@@ -46,19 +46,9 @@ export const getRFDs = async (filters = {}, userId) => {
     let q = query(
       collection(db, 'rfds'),
       where('userId', '==', userId),
-      orderBy('createdAt', 'desc')
     );
     
     // Apply filters
-    if (filters.tournament) {
-      q = query(q, where('tournamentId', '==', filters.tournament));
-    }
-    if (filters.team) {
-      q = query(q, where('team', '==', filters.team));
-    }
-    if (filters.judge) {
-      q = query(q, where('judge', '==', filters.judge));
-    }
     if (filters.result) {
       q = query(q, where('result', '==', filters.result));
     }
@@ -72,11 +62,37 @@ export const getRFDs = async (filters = {}, userId) => {
       q = query(q, where('createdAt', '<=', filters.dateTo));
     }
 
+    q = query(q, orderBy('createdAt', 'desc'));
+
     const querySnapshot = await getDocs(q);
-    return querySnapshot.docs.map(doc => ({
+    let rfds = querySnapshot.docs.map(doc => ({
       id: doc.id,
       ...doc.data()
     }));
+
+
+    if (filters.tournament?.trim()) {
+        const tournamentSearch = filters.tournament.trim().toLowerCase();
+        rfds = rfds.filter(rfd =>
+            rfd.tournament?.toLowerCase().includes(tournamentSearch)
+        );
+    }
+
+    if (filters.team?.trim()) {
+        const teamSearch = filters.team.trim().toLowerCase();
+        rfds = rfds.filter(rfd =>
+            rfd.team?.toLowerCase().includes(teamSearch)
+        );
+    }
+
+    if (filters.judge?.trim()) {
+        const judgeSearch = filters.judge.trim().toLowerCase();
+        rfds = rfds.filter(rfd =>
+            rfd.judge?.toLowerCase().includes(judgeSearch)
+        );
+    }
+
+    return rfds
   } catch (error) {
     console.error('Error fetching RFDs:', error);
     throw error;

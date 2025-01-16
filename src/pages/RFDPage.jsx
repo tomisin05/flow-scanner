@@ -51,6 +51,23 @@ const RFDPage = () => {
     fetchRFDs();
   }, [currentUser, filters]); // Re-fetch when filters change
 
+  // const handleFilterChange = async (newFilters) => { 
+  //     setIsLoading(true);
+  //     try {
+  //       const filteredRFDs = await getRFDs(currentUser.uid, newFilters);
+  //       setRfds(filteredRFDs);
+  //     } catch (error) { 
+  //       console.error('Error filtering flows:', error);
+  //       alert('Failed to filter flows'); 
+  //     } finally {  
+  //       setIsLoading(false); 
+  //     }
+  //   };
+
+  const handleFilterChange = (newFilters) => {
+    setFilters(newFilters);
+  };
+  
 
 const handleRFDSubmit = async (rfdData) => {
     try {
@@ -119,11 +136,7 @@ const handleRFDSubmit = async (rfdData) => {
           Add New RFD
         </button>
           </div>
-      <RFDFilterBar 
-        filters={filters}
-        setFilters={setFilters}
-        rounds={rounds}
-      />
+      <RFDFilterBar onFilterChange={handleFilterChange}  />
 
     <RFDList 
         rfds={rfds}
