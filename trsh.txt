@@ -1,0 +1,2099 @@
+// // FilterBar.jsx
+
+
+// import React, { useState } from 'react';
+// import { FiFilter, FiCalendar, FiTag, FiUsers, FiAward } from 'react-icons/fi'; // Import icons
+
+// const FilterBar = ({ onFilterChange }) => {
+//   const [isExpanded, setIsExpanded] = useState(false);
+//   const [filters, setFilters] = useState({
+//     tournament: '',
+//     round: '',
+//     team: '',
+//     judge: '',
+//     division: '',
+//     tags: [],
+//     startDate: '',
+//     endDate: '',
+//   });
+
+//   // Predefined options for dropdowns
+//   const rounds = ['Round 1', 'Round 2', 'Round 3', 'Round 4', 'Quarters', 'Semis', 'Finals'];
+//   const divisions = ['Varsity', 'JV', 'Novice'];
+//   const commonTags = ['K', 'DA', 'CP', 'Case', 'Theory', 'T', 'Framework'];
+
+//   const handleFilterChange = (field, value) => {
+//     const newFilters = { ...filters, [field]: value };
+//     setFilters(newFilters);
+//     onFilterChange(newFilters);
+//   };
+
+//   return (
+//     <div className="bg-white rounded-lg shadow-lg mb-6 transition-all duration-200">
+//       {/* Filter Header */}
+//       <div 
+//         className="p-4 flex items-center justify-between cursor-pointer hover:bg-gray-50"
+//         onClick={() => setIsExpanded(!isExpanded)}
+//       >
+//         <div className="flex items-center space-x-2">
+//           <FiFilter className="text-indigo-600" />
+//           <h3 className="font-semibold text-gray-700">Filter Flows</h3>
+//         </div>
+//         <button 
+//           className={`p-2 rounded-full transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`}
+//         >
+//           <svg className="w-5 h-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+//             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+//           </svg>
+//         </button>
+//       </div>
+
+//       {/* Expandable Filter Content */}
+//       {isExpanded && (
+//         <div className="p-4 border-t border-gray-100">
+//           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+//             {/* Tournament Filter */}
+//             <div className="space-y-2">
+//               <label className="flex items-center text-sm font-medium text-gray-700">
+//                 <FiAward className="mr-2 text-indigo-500" />
+//                 Tournament
+//               </label>
+//               <input
+//                 type="text"
+//                 className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+//                 placeholder="Enter tournament name"
+//                 value={filters.tournament}
+//                 onChange={(e) => handleFilterChange('tournament', e.target.value)}
+//               />
+//             </div>
+
+//             {/* Round Filter */}
+//             <div className="space-y-2">
+//               <label className="flex items-center text-sm font-medium text-gray-700">
+//                 <FiUsers className="mr-2 text-indigo-500" />
+//                 Round
+//               </label>
+//               <select
+//                 className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+//                 value={filters.round}
+//                 onChange={(e) => handleFilterChange('round', e.target.value)}
+//               >
+//                 <option value="">All Rounds</option>
+//                 {rounds.map((round) => (
+//                   <option key={round} value={round}>{round}</option>
+//                 ))}
+//               </select>
+//             </div>
+
+//             {/* Division Filter */}
+//             <div className="space-y-2">
+//               <label className="flex items-center text-sm font-medium text-gray-700">
+//                 <FiAward className="mr-2 text-indigo-500" />
+//                 Division
+//               </label>
+//               <select
+//                 className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+//                 value={filters.division}
+//                 onChange={(e) => handleFilterChange('division', e.target.value)}
+//               >
+//                 <option value="">All Divisions</option>
+//                 {divisions.map((division) => (
+//                   <option key={division} value={division}>{division}</option>
+//                 ))}
+//               </select>
+//             </div>
+
+//             {/* Judge Filter */}
+//             <div className="space-y-2">
+//               <label className="flex items-center text-sm font-medium text-gray-700">
+//                 <FiUsers className="mr-2 text-indigo-500" />
+//                 Judge
+//               </label>
+//               <input
+//                 type="text"
+//                 className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+//                 placeholder="Enter judge name"
+//                 value={filters.judge}
+//                 onChange={(e) => handleFilterChange('judge', e.target.value)}
+//               />
+//             </div>
+
+//             {/* Date Range Filters */}
+//             <div className="space-y-2">
+//               <label className="flex items-center text-sm font-medium text-gray-700">
+//                 <FiCalendar className="mr-2 text-indigo-500" />
+//                 Date Range
+//               </label>
+//               <div className="grid grid-cols-2 gap-2">
+//                 <input
+//                   type="date"
+//                   className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+//                   value={filters.startDate}
+//                   onChange={(e) => handleFilterChange('startDate', e.target.value)}
+//                 />
+//                 <input
+//                   type="date"
+//                   className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+//                   value={filters.endDate}
+//                   onChange={(e) => handleFilterChange('endDate', e.target.value)}
+//                 />
+//               </div>
+//             </div>
+
+//             {/* Tags Filter */}
+//             <div className="space-y-2">
+//               <label className="flex items-center text-sm font-medium text-gray-700">
+//                 <FiTag className="mr-2 text-indigo-500" />
+//                 Tags
+//               </label>
+//               <div className="flex flex-wrap gap-2">
+//                 {commonTags.map((tag) => (
+//                   <button
+//                     key={tag}
+//                     onClick={() => {
+//                       const newTags = filters.tags.includes(tag)
+//                         ? filters.tags.filter(t => t !== tag)
+//                         : [...filters.tags, tag];
+//                       handleFilterChange('tags', newTags);
+//                     }}
+//                     className={`px-3 py-1 rounded-full text-sm font-medium transition-colors duration-200 ${
+//                       filters.tags.includes(tag)
+//                         ? 'bg-indigo-100 text-indigo-800 border-2 border-indigo-500'
+//                         : 'bg-gray-100 text-gray-700 border-2 border-transparent hover:bg-gray-200'
+//                     }`}
+//                   >
+//                     {tag}
+//                   </button>
+//                 ))}
+//               </div>
+//             </div>
+//           </div>
+
+//           {/* Clear Filters Button */}
+//           <div className="mt-4 flex justify-end">
+//             <button
+//               onClick={() => {
+//                 const emptyFilters = {
+//                   tournament: '',
+//                   round: '',
+//                   team: '',
+//                   judge: '',
+//                   division: '',
+//                   tags: [],
+//                   startDate: '',
+//                   endDate: '',
+//                 };
+//                 setFilters(emptyFilters);
+//                 onFilterChange(emptyFilters);
+//               }}
+//               className="px-4 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors duration-200"
+//             >
+//               Clear Filters
+//             </button>
+//           </div>
+//         </div>
+//       )}
+//     </div>
+//   );
+// };
+
+// export default FilterBar;
+
+
+
+// FlowCard.jsx
+
+
+
+//   return (
+//   <div key={flow.id} className="bg-white rounded-lg shadow-md overflow-hidden">
+//     <div className="relative h-48"> {/* Add relative positioning container */}
+//       {flow.fileUrl ? (
+//         <img 
+//           src={flow.fileUrl} 
+//           alt={flow.title || 'Flow image'} 
+//           className="absolute top-0 left-0 w-full h-full object-contain" // Uses object-contain
+//           onError={(e) => {
+//             e.target.onerror = null; // Prevent infinite loop
+//             e.target.src = '/projects/fallback.png'; // Your default image path
+//           }}
+//         />
+//       ) : (
+//         <div className="w-full h-48 bg-gray-200 flex items-center justify-center">
+//           <span className="text-gray-400">No image available</span>
+//         </div>
+//       )}
+//     </div>
+    // <div className="p-4">
+    //   <h3 className="font-semibold text-lg mb-2">{flow.title}</h3>
+    //   <p className="text-gray-600 text-sm">
+    //     {flow.createdAt ? formatDate(flow.createdAt) : 'No date'}
+    //   </p>
+    // </div>
+//   </div>
+
+
+
+
+// FlowUpload.jsx
+
+// // src/components/FlowUpload.jsx
+// import { useState, useRef } from 'react';
+// import Webcam from 'react-webcam';
+// import { uploadFlow } from '../lib/firebase/flows';
+// import { useAuth } from '../contexts/AuthContext';
+
+// function FlowUpload({ onSubmit }) {
+//   const { user } = useAuth();
+//   const [uploadMethod, setUploadMethod] = useState('file');
+//   const [file, setFile] = useState(null);
+//   const [previewUrl, setPreviewUrl] = useState(null);
+//   const [isLoading, setIsLoading] = useState(false);
+//   const [metadata, setMetadata] = useState({
+//     title: '',
+//     tournament: '',
+//     round: '',
+//     team: '',
+//     tags: []
+//   });
+//   const webcamRef = useRef(null);
+
+//   const handleFileChange = (e) => {
+//     const selectedFile = e.target.files[0];
+//     if (selectedFile) {
+//       setFile(selectedFile);
+//       const url = URL.createObjectURL(selectedFile);
+//       setPreviewUrl(url);
+//     }
+//   };
+
+//   const handleCapture = async () => {
+//     if (!webcamRef.current) return;
+
+//     const imageSrc = webcamRef.current.getScreenshot();
+//     if (!imageSrc) return;
+
+//     // Convert base64 to blob
+//     const response = await fetch(imageSrc);
+//     const blob = await response.blob();
+    
+//     // Create file from blob
+//     const capturedFile = new File([blob], `capture-${Date.now()}.jpg`, { type: 'image/jpeg' });
+//     setFile(capturedFile);
+//     setPreviewUrl(imageSrc);
+//   };
+
+//   const handleInputChange = (e) => {
+//     const { name, value } = e.target;
+//     setMetadata(prev => ({
+//       ...prev,
+//       [name]: value
+//     }));
+//   };
+
+//   const handleSubmit = async (e) => {
+//     e.preventDefault();
+//     if (!file) {
+//       alert('Please select a file or capture an image');
+//       return;
+//     }
+
+//     setIsLoading(true);
+//     try {
+//       // Use the existing uploadFlow function
+//       const metadata = {
+//         ...metadata,
+//         pageCount: 1, // Default to 1 for single image uploads
+//       };
+
+//       const flowData = await uploadFlow(file, metadata, user.uid);
+//       onSubmit(flowData);
+
+//       // Reset form
+//       setFile(null);
+//       setPreviewUrl(null);
+//       setMetadata({
+//         title: '',
+//         tournament: '',
+//         round: '',
+//         team: '',
+//         tags: []
+//       });
+//     } catch (error) {
+//       console.error('Error uploading flow:', error);
+//       alert('Failed to upload flow: ' + error.message);
+//     } finally {
+//       setIsLoading(false);
+//     }
+//   };
+
+//   return (
+//     <div className="space-y-6">
+//       {/* Upload Method Selection */}
+//       <div className="flex space-x-4 mb-4">
+//         <button
+//           type="button"
+//           onClick={() => setUploadMethod('file')}
+//           className={`px-4 py-2 rounded ${
+//             uploadMethod === 'file' 
+//               ? 'bg-blue-500 text-white' 
+//               : 'bg-gray-200 text-gray-700'
+//           }`}
+//         >
+//           Upload File
+//         </button>
+//         <button
+//           type="button"
+//           onClick={() => setUploadMethod('camera')}
+//           className={`px-4 py-2 rounded ${
+//             uploadMethod === 'camera' 
+//               ? 'bg-blue-500 text-white' 
+//               : 'bg-gray-200 text-gray-700'
+//           }`}
+//         >
+//           Use Camera
+//         </button>
+//       </div>
+
+//       <form onSubmit={handleSubmit} className="space-y-4">
+//         {/* File Upload or Camera Section */}
+//         <div className="mb-4">
+//           {uploadMethod === 'file' ? (
+//             <div className="border-2 border-dashed border-gray-300 rounded-lg p-4">
+//               <input
+//                 type="file"
+//                 accept="image/*"
+//                 onChange={handleFileChange}
+//                 className="w-full"
+//               />
+//             </div>
+//           ) : (
+//             <div className="space-y-4">
+//               <Webcam
+//                 audio={false}
+//                 ref={webcamRef}
+//                 screenshotFormat="image/jpeg"
+//                 className="w-full rounded-lg"
+//               />
+//               <button
+//                 type="button"
+//                 onClick={handleCapture}
+//                 className="w-full bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+//               >
+//                 Capture Photo
+//               </button>
+//             </div>
+//           )}
+//         </div>
+
+//         {/* Preview */}
+//         {previewUrl && (
+//           <div className="mb-4">
+//             <img
+//               src={previewUrl}
+//               alt="Preview"
+//               className="max-h-48 rounded-lg mx-auto"
+//             />
+//           </div>
+//         )}
+
+//         {/* Form Fields */}
+//         <div className="space-y-4">
+//           <div>
+//             <label className="block text-sm font-medium text-gray-700">
+//               Title
+//             </label>
+//             <input
+//               type="text"
+//               name="title"
+//               value={metadata.title}
+//               onChange={handleInputChange}
+//               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+//               required
+//             />
+//           </div>
+
+//           <div>
+//             <label className="block text-sm font-medium text-gray-700">
+//               Tournament
+//             </label>
+//             <input
+//               type="text"
+//               name="tournament"
+//               value={metadata.tournament}
+//               onChange={handleInputChange}
+//               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+//             />
+//           </div>
+
+//           <div>
+//             <label className="block text-sm font-medium text-gray-700">
+//               Round
+//             </label>
+//             <input
+//               type="text"
+//               name="round"
+//               value={metadata.round}
+//               onChange={handleInputChange}
+//               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+//             />
+//           </div>
+
+//           <div>
+//             <label className="block text-sm font-medium text-gray-700">
+//               Team
+//             </label>
+//             <input
+//               type="text"
+//               name="team"
+//               value={metadata.team}
+//               onChange={handleInputChange}
+//               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+//             />
+//           </div>
+//         </div>
+
+//         {/* Submit Button */}
+//         <button
+//           type="submit"
+//           disabled={isLoading}
+//           className={`w-full px-4 py-2 rounded text-white ${
+//             isLoading 
+//               ? 'bg-gray-400 cursor-not-allowed' 
+//               : 'bg-green-500 hover:bg-green-600'
+//           }`}
+//         >
+//           {isLoading ? 'Uploading...' : 'Upload Flow'}
+//         </button>
+//       </form>
+//     </div>
+//   );
+// }
+
+// export default FlowUpload;
+
+
+
+//PART 2 Flow Upload
+
+
+//   const handleSubmit = async (e) => {
+//     e.preventDefault();
+//     if (!file || !user) {
+//       alert('Please select a file or capture an image');
+//       return;
+//     }
+
+
+
+//     setIsLoading(true);
+//     try {
+//       const metadata = {
+//         title: metadata.title || file.name,
+//         tournament: metadata.tournament,
+//         round: metadata.round,
+//         team: metadata.team,
+//         judge: metadata.judge,
+//         division: metadata.division,
+//         tags: metadata.tags,
+//         customTag: metadata.customTag,
+//         pageCount: 1
+//       };
+
+//       const flowData = await uploadFlow(file, metadata, user.uid);
+//     //   onSubmit(flowData);
+
+//       // Reset form
+//       setFile(null);
+//       setPreviewUrl(null);
+//       setMetadata({
+//         title: '',
+//         tournament: '',
+//         round: '',
+//         team: '',
+//         tags: []
+//       });
+//     } catch (error) {
+//       console.error('Error uploading flow:', error);
+//       alert('Failed to upload flow: ' + error.message);
+//     } finally {
+//       setIsLoading(false);
+//     }
+//   };
+
+
+
+//   return (
+//     <div className="space-y-6">
+//       {/* Upload Method Selection */}
+//       <div className="flex space-x-4 mb-4">
+//         <button
+//           type="button"
+//           onClick={() => setUploadMethod('file')}
+//           className={`px-4 py-2 rounded ${
+//             uploadMethod === 'file' 
+//               ? 'bg-blue-500 text-white' 
+//               : 'bg-gray-200 text-gray-700'
+//           }`}
+//         >
+//           Upload File
+//         </button>
+//         <button
+//           type="button"
+//           onClick={() => setUploadMethod('camera')}
+//           className={`px-4 py-2 rounded ${
+//             uploadMethod === 'camera' 
+//               ? 'bg-blue-500 text-white' 
+//               : 'bg-gray-200 text-gray-700'
+//           }`}
+//         >
+//           Use Camera
+//         </button>
+//       </div>
+
+//       <form onSubmit={handleSubmit} className="space-y-4">
+//         {/* File Upload or Camera Section */}
+//         <div className="mb-4">
+//           {uploadMethod === 'file' ? (
+//             <div className="border-2 border-dashed border-gray-300 rounded-lg p-4">
+//               <input
+//                 type="file"
+//                 accept="image/*"
+//                 onChange={handleFileChange}
+//                 className="w-full"
+//               />
+//             </div>
+//           ) : (
+//             <div className="space-y-4">
+//               <div className="relative w-full pt-[56.25%]">
+//                 <Webcam
+//                   audio={false}
+//                   ref={webcamRef}
+//                   screenshotFormat="image/jpeg"
+//                   className="absolute top-0 left-0 w-full h-full rounded-lg"
+//                 />
+//               </div>
+//               <button
+//                 type="button"
+//                 onClick={handleCapture}
+//                 className="w-full bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+//               >
+//                 Capture Photo
+//               </button>
+//             </div>
+//           )}
+//         </div>
+
+//         {/* Preview */}
+//         {previewUrl && (
+//           <div className="mb-4">
+//             <img
+//               src={previewUrl}
+//               alt="Preview"
+//               className="max-h-48 rounded-lg mx-auto"
+//             />
+//           </div>
+//         )}
+
+//         {/* Form Fields */}
+//         return (
+//     <div className="bg-white rounded-lg shadow-lg p-6">
+//         {/* Upload Method Selection */}
+//       <div className="flex space-x-4 mb-4">
+//         <button
+//           type="button"
+//           onClick={() => setUploadMethod('file')}
+//           className={`px-4 py-2 rounded ${
+//             uploadMethod === 'file' 
+//               ? 'bg-blue-500 text-white' 
+//               : 'bg-gray-200 text-gray-700'
+//           }`}
+//         >
+//           Upload File
+//         </button>
+//         <button
+//           type="button"
+//           onClick={() => setUploadMethod('camera')}
+//           className={`px-4 py-2 rounded ${
+//             uploadMethod === 'camera' 
+//               ? 'bg-blue-500 text-white' 
+//               : 'bg-gray-200 text-gray-700'
+//           }`}
+//         >
+//           Use Camera
+//         </button>
+//       </div>
+
+//       <form onSubmit={handleSubmit} className="space-y-4">
+//         {/* File Upload or Camera Section */}
+//         <div className="mb-4">
+//           {uploadMethod === 'file' ? (
+//             <div className="border-2 border-dashed border-gray-300 rounded-lg p-4">
+//               <input
+//                 type="file"
+//                 accept="image/*"
+//                 onChange={handleFileChange}
+//                 className="w-full"
+//               />
+//             </div>
+//           ) : (
+//             <div className="space-y-4">
+//               <div className="relative w-full pt-[56.25%]">
+//                 <Webcam
+//                   audio={false}
+//                   ref={webcamRef}
+//                   screenshotFormat="image/jpeg"
+//                   className="absolute top-0 left-0 w-full h-full rounded-lg"
+//                 />
+//               </div>
+//               <button
+//                 type="button"
+//                 onClick={handleCapture}
+//                 className="w-full bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+//               >
+//                 Capture Photo
+//               </button>
+//             </div>
+//           )}
+//         </div>
+
+//         {/* Preview */}
+//         {previewUrl && (
+//           <div className="mb-4">
+//             <img
+//               src={previewUrl}
+//               alt="Preview"
+//               className="max-h-48 rounded-lg mx-auto"
+//             />
+//           </div>
+//         )}
+
+//         {/* Title */}
+//         <div>
+//           <label className="block text-sm font-medium text-gray-700">
+//             Title
+//           </label>
+//           <input
+//             type="text"
+//             value={metadata.title}
+//             onChange={(e) => handleMetadataChange('title', e.target.value)}
+//             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+//           />
+//         </div>
+
+//         {/* Tournament and Round */}
+//         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+//           <div>
+//             <label className="block text-sm font-medium text-gray-700">
+//               Tournament
+//             </label>
+//             <input
+//               type="text"
+//               value={metadata.tournament}
+//               onChange={(e) => handleMetadataChange('tournament', e.target.value)}
+//               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+//             />
+//           </div>
+//           <div>
+//             <label className="block text-sm font-medium text-gray-700">
+//               Round
+//             </label>
+//             <select
+//               value={metadata.round}
+//               onChange={(e) => handleMetadataChange('round', e.target.value)}
+//               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+//             >
+//               <option value="">Select Round</option>
+//               {rounds.map(round => (
+//                 <option key={round} value={round}>{round}</option>
+//               ))}
+//             </select>
+//           </div>
+//         </div>
+
+//         {/* Team and Judge */}
+//         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+//           <div>
+//             <label className="block text-sm font-medium text-gray-700">
+//               Team
+//             </label>
+//             <input
+//               type="text"
+//               value={metadata.team}
+//               onChange={(e) => handleMetadataChange('team', e.target.value)}
+//               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+//             />
+//           </div>
+//           <div>
+//             <label className="block text-sm font-medium text-gray-700">
+//               Judge
+//             </label>
+//             <input
+//               type="text"
+//               value={metadata.judge}
+//               onChange={(e) => handleMetadataChange('judge', e.target.value)}
+//               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+//             />
+//           </div>
+//         </div>
+
+//         {/* Division */}
+//         <div>
+//           <label className="block text-sm font-medium text-gray-700">
+//             Division
+//           </label>
+//           <select
+//             value={metadata.division}
+//             onChange={(e) => handleMetadataChange('division', e.target.value)}
+//             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+//           >
+//             <option value="">Select Division</option>
+//             {divisions.map(division => (
+//               <option key={division} value={division}>{division}</option>
+//             ))}
+//           </select>
+//         </div>
+
+//         {/* Tags */}
+//         <div className="space-y-2">
+//           <label className="block text-sm font-medium text-gray-700">
+//             Tags
+//           </label>
+//           <div className="flex flex-wrap gap-2">
+//             {commonTags.map(tag => (
+//               <button
+//                 key={tag}
+//                 type="button"
+//                 onClick={() => handleTagToggle(tag)}
+//                 className={`px-3 py-1 rounded-full text-sm font-medium transition-colors duration-200 ${
+//                   metadata.tags.includes(tag)
+//                     ? 'bg-indigo-100 text-indigo-800 border-2 border-indigo-500'
+//                     : 'bg-gray-100 text-gray-700 border-2 border-transparent hover:bg-gray-200'
+//                 }`}
+//               >
+//                 {tag}
+//               </button>
+//             ))}
+//           </div>
+          
+//           {/* Custom Tag Input */}
+//           <div className="flex gap-2">
+//             <input
+//               type="text"
+//               value={metadata.customTag}
+//               onChange={(e) => handleMetadataChange('customTag', e.target.value)}
+//               placeholder="Add custom tag"
+//               className="flex-1 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+//             />
+//             <button
+//               type="button"
+//               onClick={handleAddCustomTag}
+//               className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"
+//             >
+//               Add Tag
+//             </button>
+//           </div>
+//         </div>
+
+//         {/* Submit Button */}
+//         <button
+//           type="submit"
+//           disabled={isLoading || !file}
+//           className={`w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white 
+//             ${isLoading || !file 
+//               ? 'bg-gray-400 cursor-not-allowed' 
+//               : 'bg-indigo-600 hover:bg-indigo-700'}`}
+//         >
+//           {isLoading ? 'Uploading...' : 'Upload Flow'}
+//         </button>
+//       </form>
+//     </div>
+//   );
+// };
+
+// export default FlowUpload;
+
+
+
+
+
+// // src/components/Layout.jsx
+
+
+
+// import { Outlet, NavLink } from 'react-router-dom'
+// import { useAuth } from '../contexts/AuthContext'
+
+// function Layout() {
+//   const { currentUser, logout } = useAuth()
+
+//   return (
+//     <div className="min-h-screen bg-gray-50">
+//       <nav className="bg-white shadow-sm">
+//         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+//           <div className="flex justify-between h-16 items-center">
+//             <div className="flex space-x-4">
+//               <NavLink 
+//                 to="/" 
+//                 className={({ isActive }) =>
+//                   `px-3 py-2 rounded-md ${isActive ? 'bg-gray-100' : 'hover:bg-gray-50'}`
+//                 }
+//               >
+//                 Home
+//               </NavLink>
+              
+//               {currentUser && (
+//                 <>
+//                   <NavLink 
+//                     to="/dashboard" 
+//                     className={({ isActive }) =>
+//                       `px-3 py-2 rounded-md ${isActive ? 'bg-gray-100' : 'hover:bg-gray-50'}`
+//                     }
+//                   >
+//                     Dashboard
+//                   </NavLink>
+                  
+//                   <NavLink 
+//                     to="/tournaments" 
+//                     className={({ isActive }) =>
+//                       `px-3 py-2 rounded-md ${isActive ? 'bg-gray-100' : 'hover:bg-gray-50'}`
+//                     }
+//                   >
+//                     Tournaments
+//                   </NavLink>
+                  
+//                   <NavLink 
+//                     to="/leaderboard" 
+//                     className={({ isActive }) =>
+//                       `px-3 py-2 rounded-md ${isActive ? 'bg-gray-100' : 'hover:bg-gray-50'}`
+//                     }
+//                   >
+//                     Leaderboard
+//                   </NavLink>
+//                 </>
+//               )}
+//             </div>
+
+//             <div className="flex items-center space-x-4">
+//               {currentUser ? (
+//                 <>
+//                   <span className="text-gray-700">{currentUser.email}</span>
+//                   <button
+//                     onClick={logout}
+//                     className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+//                   >
+//                     Sign Out
+//                   </button>
+//                 </>
+//               ) : (
+//                 <NavLink 
+//                   to="/" 
+//                   className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+//                 >
+//                   Sign In
+//                 </NavLink>
+//               )}
+//             </div>
+//           </div>
+//         </div>
+//       </nav>
+
+//       <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+//         <Outlet />
+//       </main>
+//     </div>
+//   )
+// }
+
+// export default Layout
+
+
+// NavBar.jsx
+
+
+
+
+//   return (
+//     <nav className="bg-white shadow-lg">
+//       <div className="container mx-auto px-4">
+//         <div className="flex justify-between items-center py-4">
+//           <Link to="/" className="text-xl font-bold">Flow Scanner</Link>
+//           <div className="flex items-center space-x-4">
+//             <Link to="/dashboard" className="hover:text-blue-600">Dashboard</Link>
+//             <Link to="/tournaments" className="hover:text-blue-600">Tournaments</Link>
+//             <Link to="/leaderboard" className="hover:text-blue-600">Leaderboard</Link>
+//             {user ? (
+//               <div className="flex items-center space-x-4">
+//                 <span>{user.displayName}</span>
+//                 {user.photoURL && (
+//                   <img 
+//                     src={user.photoURL} 
+//                     alt="Profile" 
+//                     className="w-8 h-8 rounded-full"
+//                   />
+//                 )}
+//                 <button
+//                   onClick={handleLogout}
+//                   className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+//                 >
+//                   Logout
+//                 </button>
+//               </div>
+//             ) : (
+//               <button
+//                 onClick={login}
+//                 className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+//               >
+//                 Login
+//               </button>
+//             )}
+//           </div>
+//         </div>
+//       </div>
+//     </nav>
+//   );
+// }
+
+// export default Navbar;
+
+
+
+/// Tournament.jsx
+
+
+
+
+// import { useState, useEffect } from 'react';
+// import { 
+//   collection, 
+//   query, 
+//   where, 
+//   getDocs, 
+//   addDoc, 
+//   doc, 
+//   updateDoc, 
+//   deleteDoc 
+// } from 'firebase/firestore';
+// import { db } from '../lib/firebase/config';
+// import FlowUpload from './FlowUpload';
+
+// export default function Tournaments({ userId }) {
+//   const [tournaments, setTournaments] = useState([]);
+//   const [loading, setLoading] = useState(false);
+//   const [error, setError] = useState(null);
+//   const [selectedTournament, setSelectedTournament] = useState(null);
+//   const [showCreateForm, setShowCreateForm] = useState(false);
+//   const [newTournament, setNewTournament] = useState({
+//     name: '',
+//     date: '',
+//     location: '',
+//     description: ''
+//   });
+
+//   // Fetch tournaments
+//   useEffect(() => {
+//     const fetchTournaments = async () => {
+//       setLoading(true);
+//       try {
+//         const tournamentsRef = collection(db, 'tournaments');
+//         const q = query(
+//           tournamentsRef,
+//           where('participants', 'array-contains', userId)
+//         );
+//         const querySnapshot = await getDocs(q);
+//         const tournamentsData = querySnapshot.docs.map(doc => ({
+//           id: doc.id,
+//           ...doc.data()
+//         }));
+//         setTournaments(tournamentsData);
+//       } catch (err) {
+//         setError('Error fetching tournaments');
+//         console.error('Error fetching tournaments:', err);
+//       } finally {
+//         setLoading(false);
+//       }
+//     };
+
+//     if (userId) {
+//       fetchTournaments();
+//     }
+//   }, [userId]);
+
+//   // Handle tournament creation
+//   const handleCreateTournament = async (e) => {
+//     e.preventDefault();
+
+//     // Validate required fields
+//   if (!newTournament.name || !newTournament.date || !newTournament.location) {
+//     setError('Please fill in all required fields');
+//     return;
+//   }
+
+//     try {
+//       const tournamentDate = new Date(newTournament.date);
+      
+//       const tournamentData = {
+//         name: newTournament.name,
+//         date: tournamentDate,
+//         location: newTournament.location,
+//         description: newTournament.description || '',
+//         startDate: tournamentDate,
+//         flows: [],
+//         participants: [userId],
+//         createdBy: userId,
+//         createdAt: new Date(),
+//         updatedAt: new Date()
+//       };
+//       console.log("Tournament Data:", tournamentData );
+//     //   const docRef = await addDoc(collection(db, 'tournaments'), tournamentData);
+//     const docRef = await addDoc(collection(db, 'tournaments'), {
+//         ...tournamentData,
+//         // Convert Date objects to Firestore timestamps
+//         date: tournamentDate,
+//         createdAt: new Date(),
+//         updatedAt: new Date()
+//       });
+
+//       setTournaments(prev => [...prev, { 
+//         id: docRef.id, 
+//         ...tournamentData 
+//       }]);
+      
+//       setShowCreateForm(false);
+//       setNewTournament({
+//         name: '',
+//         date: '',
+//         location: '',
+//         description: ''
+//       });
+      
+//       alert('Tournament created successfully!');
+//     } catch (err) {
+//       setError('Error creating tournament: ' + err.message);
+//       console.error('Error creating tournament:', err);
+//     }
+//   };
+
+//   if (loading) {
+//     return <div>Loading tournaments...</div>;
+//   }
+
+//   if (error) {
+//     return <div className="text-red-500">{error}</div>;
+//   }
+
+
+// import { useState, useEffect } from 'react';
+// import { collection, query, where, getDocs, addDoc } from 'firebase/firestore';
+// import { db } from '../lib/firebase/config';
+// import { useAuth } from '../contexts/AuthContext'; // Add this import
+// import FlowUpload from './FlowUpload';
+
+// export default function Tournaments() {  // Remove userId prop
+//   const { user } = useAuth(); // Get user from AuthContext
+//   const [tournaments, setTournaments] = useState([]);
+//   const [loading, setLoading] = useState(false);
+//   const [error, setError] = useState(null);
+//   const [selectedTournament, setSelectedTournament] = useState(null);
+//   const [showCreateForm, setShowCreateForm] = useState(false);
+//   const [newTournament, setNewTournament] = useState({
+//     name: '',
+//     date: '',
+//     location: '',
+//     description: ''
+//   });
+
+//   // Fetch tournaments
+//   useEffect(() => {
+//     const fetchTournaments = async () => {
+//       if (!user?.uid) return; // Guard clause for user
+      
+//       setLoading(true);
+//       try {
+//         const tournamentsRef = collection(db, 'tournaments');
+//         const q = query(
+//           tournamentsRef,
+//           where('participants', 'array-contains', user.uid)
+//         );
+//         const querySnapshot = await getDocs(q);
+//         const tournamentsData = querySnapshot.docs.map(doc => ({
+//           id: doc.id,
+//           ...doc.data()
+//         }));
+//         setTournaments(tournamentsData);
+//       } catch (err) {
+//         setError('Error fetching tournaments');
+//         console.error('Error fetching tournaments:', err);
+//       } finally {
+//         setLoading(false);
+//       }
+//     };
+
+//     fetchTournaments();
+//   }, [user]);
+
+//   const handleCreateTournament = async (e) => {
+//     e.preventDefault();
+    
+//     if (!user?.uid) {
+//       setError('You must be logged in to create a tournament');
+//       return;
+//     }
+
+//     // Validate required fields
+//     if (!newTournament.name || !newTournament.date || !newTournament.location) {
+//       setError('Please fill in all required fields');
+//       return;
+//     }
+
+//     try {
+//       const tournamentDate = new Date(newTournament.date);
+//       if (isNaN(tournamentDate)) {
+//         throw new Error('Invalid date format');
+//       }
+
+//       const tournamentData = {
+//         name: newTournament.name.trim(),
+//         date: tournamentDate,
+//         location: newTournament.location.trim(),
+//         description: newTournament.description?.trim() || '',
+//         flows: [],
+//         participants: [user.uid], // Use user.uid instead of userId
+//         createdBy: user.uid,     // Use user.uid instead of userId
+//         createdAt: new Date(),
+//         updatedAt: new Date()
+//       };
+
+//       console.log('Creating tournament with data:', tournamentData);
+
+//       const docRef = await addDoc(collection(db, 'tournaments'), tournamentData);
+      
+//       setTournaments(prev => [...prev, { 
+//         id: docRef.id, 
+//         ...tournamentData 
+//       }]);
+      
+//       setShowCreateForm(false);
+//       setNewTournament({
+//         name: '',
+//         date: '',
+//         location: '',
+//         description: ''
+//       });
+      
+//       alert('Tournament created successfully!');
+//     } catch (err) {
+//       setError('Error creating tournament: ' + err.message);
+//       console.error('Error creating tournament:', err);
+//     }
+//   };
+
+//   // Rest of your component remains the same...
+//   return (
+//     <div className="container mx-auto p-4">
+//       <div className="flex justify-between items-center mb-6">
+//         <h1 className="text-2xl font-bold">Tournaments</h1>
+//         <button
+//           onClick={() => setShowCreateForm(!showCreateForm)}
+//           className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+//         >
+//           {showCreateForm ? 'Cancel' : 'Create Tournament'}
+//         </button>
+//       </div>
+
+//       {/* Create Tournament Form */}
+//       {showCreateForm && (
+//         <form onSubmit={handleCreateTournament} className="mb-8 space-y-4 bg-white p-6 rounded-lg shadow">
+//           <div>
+//             <label className="block text-sm font-medium text-gray-700">Tournament Name</label>
+//             <input
+//               type="text"
+//               value={newTournament.name}
+//               onChange={(e) => setNewTournament({...newTournament, name: e.target.value})}
+//               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+//               required
+//             />
+//           </div>
+
+//           <div>
+//             <label className="block text-sm font-medium text-gray-700">Date</label>
+//             <input
+//               type="date"
+//               value={newTournament.date}
+//               onChange={(e) => setNewTournament({...newTournament, date: e.target.value})}
+//               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+//               required
+//             />
+//           </div>
+
+//           <div>
+//             <label className="block text-sm font-medium text-gray-700">Location</label>
+//             <input
+//               type="text"
+//               value={newTournament.location}
+//               onChange={(e) => setNewTournament({...newTournament, location: e.target.value})}
+//               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+//               required
+//             />
+//           </div>
+
+//           <div>
+//             <label className="block text-sm font-medium text-gray-700">Description</label>
+//             <textarea
+//               value={newTournament.description}
+//               onChange={(e) => setNewTournament({...newTournament, description: e.target.value})}
+//               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+//               rows="3"
+//             />
+//           </div>
+
+//           <button
+//             type="submit"
+//             className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+//           >
+//             Create Tournament
+//           </button>
+//         </form>
+//       )}
+
+//       {/* Tournaments List */}
+//       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+//         {tournaments.map(tournament => (
+//           <div
+//             key={tournament.id}
+//             className="border rounded-lg p-4 bg-white shadow hover:shadow-md transition-shadow"
+//           >
+//             <h3 className="text-xl font-semibold mb-2">{tournament.name}</h3>
+//             <p className="text-gray-600 mb-2">
+//               Date: {new Date(tournament.date).toLocaleDateString()}
+//             </p>
+//             <p className="text-gray-600 mb-2">Location: {tournament.location}</p>
+//             {tournament.description && (
+//               <p className="text-gray-600 mb-4">{tournament.description}</p>
+//             )}
+            
+//             {/* Tournament Actions */}
+//             <div className="flex justify-between items-center mt-4">
+//               <button
+//                 onClick={() => setSelectedTournament(
+//                   selectedTournament?.id === tournament.id ? null : tournament
+//                 )}
+//                 className="text-blue-500 hover:text-blue-700"
+//               >
+//                 {selectedTournament?.id === tournament.id ? 'Hide Upload' : 'Upload Flow'}
+//               </button>
+//               <span className="text-sm text-gray-500">
+//                 {tournament.flows?.length || 0} flows
+//               </span>
+//             </div>
+
+//             {/* Flow Upload Section */}
+//             {selectedTournament?.id === tournament.id && (
+//               <div className="mt-4 pt-4 border-t">
+//                 <FlowUpload
+//                   userId={user.uid}
+//                   tournamentId={tournament.id}
+//                 />
+//               </div>
+//             )}
+//           </div>
+//         ))}
+//       </div>
+
+//       {/* No Tournaments Message */}
+//       {tournaments.length === 0 && !showCreateForm && (
+//         <div className="text-center text-gray-500 mt-8">
+//           No tournaments found. Create one to get started!
+//         </div>
+//       )}
+//     </div>
+//   );
+// }
+
+
+
+
+// User.js
+
+
+// export async function updateUserStats(userId, pageCountDelta) {
+//     try {
+//         const userRef = doc(db, 'users', userId);
+//         const userSnap = await getDoc(userRef);
+//         const userData = userSnap.data();
+
+//         if (!userData) return;
+
+//         const newTotalFlows = Math.max(0, (userData.totalFlows || 0) + Math.sign(pageCountDelta));
+//         const newTreesSpared = Math.max(0, (userData.treesSpared || 0) + (pageCountDelta * 0.0001));
+
+//         await updateDoc(userRef, {
+//             totalFlows: newTotalFlows,
+//             treesSpared: newTreesSpared,
+//             updatedAt: new Date()
+//         });
+//     } catch (error) {
+//         console.error('Error updating user stats:', error);
+//         throw error;
+//     }
+//     }
+
+
+
+// Dashboard.jsx
+
+
+// import { useState, useRef } from 'react';
+// import { useAuth } from '../contexts/AuthContext';
+// import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+// import { storage } from '../lib/firebase/config';
+// import Webcam from 'react-webcam';
+
+// function Dashboard() {
+//   const { user } = useAuth();
+//   const [showCamera, setShowCamera] = useState(false);
+//   const [flows, setFlows] = useState([]);
+//   const webcamRef = useRef(null);
+  
+//   const handleCapture = async () => {
+//     const imageSrc = webcamRef.current.getScreenshot();
+//     if (!imageSrc) return;
+
+//     try {
+//       // Convert base64 to blob
+//       const response = await fetch(imageSrc);
+//       const blob = await response.blob();
+
+//       // Create unique filename
+//       const filename = `flows/${user.uid}/${Date.now()}.jpg`;
+//       const storageRef = ref(storage, filename);
+
+//       // Upload to Firebase Storage
+//       const snapshot = await uploadBytes(storageRef, blob);
+//       const downloadURL = await getDownloadURL(snapshot.ref);
+
+//       // Save flow data to Firestore through API
+//       const flowData = {
+//         userId: user.uid,
+//         title: `Flow ${flows.length + 1}`,
+//         imageUrl: downloadURL,
+//         tags: ['debate'],
+//         metadata: {
+//           round: '1',
+//           tournament: 'Sample Tournament',
+//           opponent: 'Team A'
+//         }
+//       };
+
+//       const apiResponse = await fetch('/api/flows', {
+//         method: 'POST',
+//         headers: {
+//           'Content-Type': 'application/json',
+//           'Authorization': `Bearer ${await user.getIdToken()}`
+//         },
+//         body: JSON.stringify(flowData),
+//       });
+
+//       if (!apiResponse.ok) {
+//         throw new Error('Failed to save flow data');
+//       }
+
+//       const newFlow = await apiResponse.json();
+//       setFlows([...flows, { ...flowData, id: newFlow.id }]);
+//       setShowCamera(false);
+//     } catch (error) {
+//       console.error('Error uploading flow:', error);
+//       alert('Failed to upload flow');
+//     }
+//   };
+
+//   return (
+//     <div>
+//       <div className="flex justify-between items-center mb-8">
+//         <h1 className="text-3xl font-bold">Your Flows</h1>
+//         <button
+//           onClick={() => setShowCamera(true)}
+//           className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+//         >
+//           Upload New Flow
+//         </button>
+//       </div>
+
+//       {showCamera && (
+//         <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4">
+//           <div className="bg-white p-4 rounded-lg max-w-2xl w-full">
+//             <div className="flex justify-between items-center mb-4">
+//               <h2 className="text-xl font-bold">Capture Flow</h2>
+//               <button
+//                 onClick={() => setShowCamera(false)}
+//                 className="text-gray-500 hover:text-gray-700"
+//               >
+//                 Close
+//               </button>
+//             </div>
+//             <Webcam
+//               audio={false}
+//               screenshotFormat="image/jpeg"
+//               onUserMedia={() => console.log('Camera ready')}
+//               className="w-full"
+//             />
+//             <button
+//               onClick={() => handleCapture()}
+//               className="mt-4 w-full bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+//             >
+//               Capture
+//             </button>
+//           </div>
+//         </div>
+//       )}
+
+//       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+//         {flows.map((flow) => (
+//           <div key={flow.id} className="bg-white rounded-lg shadow-md overflow-hidden">
+//             <img src={flow.image} alt={flow.title} className="w-full h-48 object-cover" />
+//             <div className="p-4">
+//               <h3 className="font-semibold text-lg mb-2">{flow.title}</h3>
+//               <p className="text-gray-600 text-sm">
+//                 {new Date(flow.date).toLocaleDateString()}
+//               </p>
+//             </div>
+//           </div>
+//         ))}
+//       </div>
+//     </div>
+//   );
+// }
+
+// // export default Dashboard;
+
+
+// import { useState, useRef } from 'react';
+// import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+// import { collection, addDoc } from 'firebase/firestore';
+// import { storage, db } from '../lib/firebase/config';
+// import Webcam from 'react-webcam';
+
+// function Dashboard() {
+//   const [showCamera, setShowCamera] = useState(false);
+//   const [flows, setFlows] = useState([]);
+//   const webcamRef = useRef(null); // Add this line - it was missing
+
+//   const formatDate = (dateValue) => {
+//     if (!dateValue) return 'N/A';
+    
+//     let date;
+//     if (typeof dateValue === 'string') {
+//       // If it's a string, try to create a new Date object
+//       date = new Date(dateValue);
+//     } else if (dateValue instanceof Date) {
+//       // If it's already a Date object, use it directly
+//       date = dateValue;
+//     } else if (typeof dateValue.toDate === 'function') {
+//       // If it's a Firestore Timestamp, convert to Date
+//       date = dateValue.toDate();
+//     } else {
+//       // If we can't recognize the format, return 'Invalid Date'
+//       return 'Invalid Date';
+//     }
+    
+//     // Check if the date is valid
+//     if (isNaN(date.getTime())) {
+//       return 'Invalid Date';
+//     }
+    
+//     // Format the date
+//     return date.toLocaleDateString();
+//   };
+  
+
+//   const handleCapture = async () => {
+//     if (!webcamRef.current) {
+//       console.error('Webcam not initialized');
+//       return;
+//     }
+
+//     const imageSrc = webcamRef.current.getScreenshot();
+//     if (!imageSrc) {
+//       console.error('Failed to capture image');
+//       return;
+//     }
+
+//     try {
+//       // Convert base64 to blob
+//       const response = await fetch(imageSrc);
+//       const blob = await response.blob();
+
+//       // Create unique filename with timestamp
+//       const filename = `flows/${Date.now()}.jpg`;
+//       const storageRef = ref(storage, filename);
+
+//       // Upload to Firebase Storage
+//       const snapshot = await uploadBytes(storageRef, blob);
+//       const downloadURL = await getDownloadURL(snapshot.ref);
+
+//       // Create flow document in Firestore
+//       const flowData = {
+//         title: `Flow ${flows.length + 1}`,
+//         imageUrl: downloadURL,
+//         createdAt: new Date(),
+//         tags: ['debate'],
+//         metadata: {
+//           round: '1',
+//           tournament: 'Sample Tournament',
+//           opponent: 'Team A'
+//         }
+//       };
+
+//       const docRef = await addDoc(collection(db, 'flows'), flowData);
+      
+//       // Update local state with new flow
+//       setFlows(prevFlows => [...prevFlows, { 
+//         id: docRef.id, 
+//         ...flowData 
+//       }]);
+
+//       // Close camera after successful capture
+//       setShowCamera(false);
+
+//       // Optional: Show success message
+//       alert('Flow captured successfully!');
+
+//     } catch (error) {
+//       console.error('Error uploading flow:', error);
+//       alert('Failed to upload flow: ' + error.message);
+//     }
+//   };
+
+//   return (
+//     <div className="container mx-auto px-4 py-8">
+//       <div className="flex justify-between items-center mb-8">
+//         <h1 className="text-3xl font-bold">Your Flows</h1>
+//         <button
+//           onClick={() => setShowCamera(true)}
+//           className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+//         >
+//           Upload New Flow
+//         </button>
+//       </div>
+
+//       {/* Camera Modal */}
+//       {showCamera && (
+//         <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 z-50">
+//           <div className="bg-white p-4 rounded-lg max-w-2xl w-full">
+//             <div className="flex justify-between items-center mb-4">
+//               <h2 className="text-xl font-bold">Capture Flow</h2>
+//               <button
+//                 onClick={() => setShowCamera(false)}
+//                 className="text-gray-500 hover:text-gray-700"
+//               >
+//                 Close
+//               </button>
+//             </div>
+            
+//             <div className="relative">
+//               <Webcam
+//                 audio={false}
+//                 ref={webcamRef}
+//                 screenshotFormat="image/jpeg"
+//                 onUserMedia={() => console.log('Camera ready')}
+//                 className="w-full"
+//               />
+//             </div>
+
+//             <button
+//               onClick={handleCapture}
+//               className="mt-4 w-full bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+//             >
+//               Capture
+//             </button>
+//           </div>
+//         </div>
+//       )}
+
+//       {/* Flows Grid */}
+//       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+//         {flows.map((flow) => (
+//           <div key={flow.id} className="bg-white rounded-lg shadow-md overflow-hidden">
+//             <img 
+//               src={flow.imageUrl} 
+//               alt={flow.title} 
+//               className="w-full h-48 object-cover"
+//             />
+//             <div className="p-4">
+//               <h3 className="font-semibold text-lg mb-2">{flow.title}</h3>
+//               <p className="text-gray-600 text-sm">
+//                 {formatDate(flow.createdAt)}
+//               </p>
+//               <div className="mt-2 flex flex-wrap gap-2">
+//                 {flow.tags.map((tag, index) => (
+//                   <span 
+//                     key={index}
+//                     className="bg-gray-100 text-gray-600 px-2 py-1 rounded-full text-sm"
+//                   >
+//                     {tag}
+//                   </span>
+//                 ))}
+//               </div>
+//             </div>
+//           </div>
+//         ))}
+//       </div>
+
+//       {/* Empty state */}
+//       {flows.length === 0 && (
+//         <div className="text-center text-gray-500 mt-8">
+//           No flows yet. Click "Upload New Flow" to get started!
+//         </div>
+//       )}
+//     </div>
+//   );
+// }
+
+// export default Dashboard;
+
+ // try {
+    //   // Create flow document in Firestore
+    //   const docRef = await addDoc(collection(db, 'flows'), {
+    //     ...flowData,
+    //     userId: user.uid,
+    //     createdAt: new Date()
+    //   });
+
+    //   await updateUserStats(user.uid);
+
+    //   setShowUploadModal(false);
+    //   alert('Flow uploaded successfully!');
+
+    //   window.location.reload();
+
+    //   // Update local state with new flow
+    //   setFlows(prevFlows => [...prevFlows, { 
+    //     id: docRef.id, 
+    //     ...flowData 
+    //   }]);
+
+
+
+
+
+
+/// Dashboard.jsx Part 2
+
+
+
+// return (
+//     <div className="container mx-auto px-4 py-8">
+//       {/* Header */}
+//       <div className="flex justify-between items-center mb-8">
+//         <h1 className="text-3xl font-bold">Your Flows</h1>
+//         <button
+//           onClick={() => setShowUploadModal(true)}
+//           className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+//         >
+//           Upload New Flow
+//         </button>
+//       </div>
+
+//       {/* Filters Section */}
+//       <div className="bg-white rounded-lg shadow p-6 mb-8">
+//         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+//           {/* Tournament Filter */}
+//           <div>
+//             <label className="block text-sm font-medium text-gray-700 mb-1">
+//               Tournament
+//             </label>
+//             <input
+//               type="text"
+//               name="tournament"
+//               value={filters.tournament}
+//               onChange={handleFilterChange}
+//               className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+//             />
+//           </div>
+
+//           {/* Round Filter */}
+//           <div>
+//             <label className="block text-sm font-medium text-gray-700 mb-1">
+//               Round
+//             </label>
+//             <input
+//               type="text"
+//               name="round"
+//               value={filters.round}
+//               onChange={handleFilterChange}
+//               className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+//             />
+//           </div>
+
+//           {/* Team Filter */}
+//           <div>
+//             <label className="block text-sm font-medium text-gray-700 mb-1">
+//               Team
+//             </label>
+//             <input
+//               type="text"
+//               name="team"
+//               value={filters.team}
+//               onChange={handleFilterChange}
+//               className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+//             />
+//           </div>
+
+//           {/* Division Filter */}
+//           <div>
+//             <label className="block text-sm font-medium text-gray-700 mb-1">
+//               Division
+//             </label>
+//             <input
+//               type="text"
+//               name="division"
+//               value={filters.division}
+//               onChange={handleFilterChange}
+//               className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+//             />
+//           </div>
+
+//           {/* Date Range Filters */}
+//           <div>
+//             <label className="block text-sm font-medium text-gray-700 mb-1">
+//               Start Date
+//             </label>
+//             <input
+//               type="date"
+//               name="startDate"
+//               value={filters.startDate}
+//               onChange={handleFilterChange}
+//               className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+//             />
+//           </div>
+
+//           <div>
+//             <label className="block text-sm font-medium text-gray-700 mb-1">
+//               End Date
+//             </label>
+//             <input
+//               type="date"
+//               name="endDate"
+//               value={filters.endDate}
+//               onChange={handleFilterChange}
+//               className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+//             />
+//           </div>
+//         </div>
+
+//         {/* Filter Actions */}
+//         <div className="mt-4 flex justify-end space-x-4">
+//           <button
+//             onClick={clearFilters}
+//             className="px-4 py-2 text-gray-700 hover:text-gray-900"
+//           >
+//             Clear Filters
+//           </button>
+//         </div>
+//       </div>
+
+//       {/* Flows Grid */}
+//       {isloading ? (
+//         <div className="text-center py-8">
+//           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto"></div>
+//         </div>
+//       ) : (
+//         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+//           {flows.map((flow) => (
+//             <div key={flow.id} className="bg-white rounded-lg shadow-md overflow-hidden">
+//               <img
+//                 src={flow.fileUrl}
+//                 alt={flow.title}
+//                 className="w-full h-48 object-cover"
+//               />
+//               <div className="p-4">
+//                 <h3 className="font-semibold text-lg mb-2">{flow.title}</h3>
+//                 <div className="text-sm text-gray-600">
+//                   {flow.tournament && (
+//                     <p>Tournament: {flow.tournament}</p>
+//                   )}
+//                   {flow.round && (
+//                     <p>Round: {flow.round}</p>
+//                   )}
+//                   {flow.team && (
+//                     <p>Team: {flow.team}</p>
+//                   )}
+//                   <p>Uploaded: {new Date(flow.uploadDate?.toDate()).toLocaleDateString()}</p>
+//                 </div>
+//               </div>
+//             </div>
+//           ))}
+//         </div>
+//       )}
+
+//       {/* Upload Modal */}
+//       {showUploadModal && (
+//         <div className="fixed inset-0 z-50 overflow-y-auto">
+//           <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+//             <div className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75" />
+//             <div className="relative inline-block w-full max-w-2xl px-4 pt-5 pb-4 overflow-hidden text-left align-bottom transition-all transform bg-white rounded-lg shadow-xl sm:my-8 sm:align-middle sm:p-6">
+//               <div className="absolute top-0 right-0 pt-4 pr-4">
+//                 <button
+//                   onClick={() => setShowUploadModal(false)}
+//                   className="text-gray-400 hover:text-gray-500"
+//                 >
+//                   <span className="sr-only">Close</span>
+//                   <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+//                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+//                   </svg>
+//                 </button>
+//               </div>
+//               <div className="mt-3 sm:mt-0">
+//                 <h3 className="text-lg font-medium leading-6 text-gray-900">
+//                   Upload Flow
+//                 </h3>
+//                 <div className="mt-4 max-h-[80vh] overflow-y-auto">
+//                   <FlowUpload
+//                     onSubmit={(flowData) => {
+//                       setShowUploadModal(false);
+//                       // Refresh flows list
+//                       getFilteredFlows(user.uid, filters).then(setFlows);
+//                     }}
+//                   />
+//                 </div>
+//               </div>
+//             </div>
+//           </div>
+//         </div>
+//       )}
+//     </div>
+//   );
+// }
+
+// export default Dashboard;
+
+
+
+//   Home.jsx
+
+// import { useAuth0 } from '@auth0/auth0-react';
+
+// function Home() {
+//   const { loginWithRedirect, isAuthenticated } = useAuth0();
+ 
+//   return (
+//     <div className="text-center">
+//       <h1 className="text-4xl font-bold mb-8">Welcome to Flow Scanner</h1>
+//       <p className="text-xl mb-8">
+//         Store your debate flows digitally and help save the environment!
+//       </p>
+//       {!isAuthenticated && (
+//         <button
+//           onClick={() => loginWithRedirect()}
+//           className="bg-blue-500 text-white px-6 py-3 rounded-lg text-lg hover:bg-blue-600"
+//         >
+//           Get Started
+//         </button> 
+//       )}
+//       <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-8">
+//         <FeatureCard
+//           title="Digital Storage"
+//           description="Upload and organize your debate flows in one secure location"
+//         />
+//         <FeatureCard
+//           title="Easy Access"
+//           description="Access your flows anytime, anywhere, from any device"
+//         />
+//         <FeatureCard
+//           title="Environmental Impact"
+//           description="Track your contribution to saving trees and reducing paper waste"
+//         />
+//       </div>
+//     </div>
+//   );
+// }
+
+// function FeatureCard({ title, description }) {
+//   return (
+//     <div className="p-6 bg-white rounded-lg shadow-md">
+//       <h3 className="text-xl font-semibold mb-4">{title}</h3>
+//       <p className="text-gray-600">{description}</p>
+//     </div>
+//   );
+// }
+
+// export default Home;
+
+
+
+// Leaderboard.jsx
+
+// import { useEffect, useState } from 'react';
+// import { collection, getDocs } from 'firebase/firestore';
+// import { db } from '../lib/firebase/config';;
+
+// function Leaderboard() {
+//   const [users, setUsers] = useState([]);
+
+//   useEffect(() => {
+//     const fetchLeaderboardData = async () => {
+//       const usersRef = collection(db, 'users');
+//       const snapshot = await getDocs(usersRef);
+//       const userData = snapshot.docs.map(doc => ({
+//         id: doc.id,
+//         ...doc.data()
+//       }));
+//       setUsers(userData);
+//     };
+
+//     fetchLeaderboardData();
+//   }, []);
+  
+//   const calculateCO2Saved = (sheets) => {
+//     return (sheets * 0.006).toFixed(2); // kg of CO2 saved
+//   };
+ 
+//   return (
+//     <div> 
+//       <h1 className="text-3xl font-bold mb-8">Environmental Impact Leaderboard</h1>
+      
+//       <div className="bg-white rounded-lg shadow-md p-6 mb-8">
+//         <h2 className="text-xl font-semibold mb-4">Total Community Impact</h2>
+//         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+//           <div className="text-center">
+//             <p className="text-3xl font-bold text-green-600">
+//               {users.reduce((sum, user) => sum + user.sheetsScanned, 0)}
+//             </p>
+//             <p className="text-gray-600">Sheets of Paper Saved</p>
+//           </div>
+//           <div className="text-center">
+//             <p className="text-3xl font-bold text-green-600">
+//               {users.reduce((sum, user) => sum + user.treesPreserved, 0).toFixed(1)}
+//             </p>
+//             <p className="text-gray-600">Trees Preserved</p>
+//           </div>
+//           <div className="text-center">
+//             <p className="text-3xl font-bold text-green-600">
+//               {calculateCO2Saved(users.reduce((sum, user) => sum + user.sheetsScanned, 0))}
+//             </p>
+//             <p className="text-gray-600">kg CO2 Prevented</p>
+//           </div>
+//         </div>
+//       </div>
+
+//       <div className="bg-white rounded-lg shadow-md overflow-hidden">
+//         <table className="min-w-full">
+//           <thead className="bg-gray-50">
+//             <tr>
+//               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+//                 Rank
+//               </th>
+//               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+//                 Name
+//               </th>
+//               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+//                 Sheets Saved
+//               </th>
+//               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+//                 Trees Preserved
+//               </th>
+//               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+//                 CO2 Prevented (kg)
+//               </th>
+//             </tr>
+//           </thead>
+//           <tbody className="bg-white divide-y divide-gray-200">
+//             {users.map((user, index) => (
+//               <tr key={user.id}>
+//                 <td className="px-6 py-4 whitespace-nowrap">
+//                   {index + 1}
+//                 </td>
+//                 <td className="px-6 py-4 whitespace-nowrap">
+//                   {user.name}
+//                 </td>
+//                 <td className="px-6 py-4 whitespace-nowrap">
+//                   {user.sheetsScanned}
+//                 </td>
+//                 <td className="px-6 py-4 whitespace-nowrap">
+//                   {user.treesPreserved}
+//                 </td>
+//                 <td className="px-6 py-4 whitespace-nowrap">
+//                   {calculateCO2Saved(user.sheetsScanned)}
+//                 </td>
+//               </tr>
+//             ))}
+//           </tbody>
+//         </table>
+//       </div>
+//     </div>
+//   );
+// }
+
+// export default Leaderboard;
+
+
+//   useEffect(() => {
+//     const fetchUsers = async () => {
+//       try {
+//         const usersQuery = query(
+//           collection(db, 'users'),
+//           orderBy('treesSpared', 'desc')
+//         );
+        
+//         const querySnapshot = await getDocs(usersQuery);
+//         const usersData = querySnapshot.docs.map(doc => ({
+//           id: doc.id,
+//           ...doc.data(),
+//           // Ensure numerical values are valid
+//           treesSpared: parseFloat(doc.data().treesSpared) || 0,
+//           totalFlows: parseInt(doc.data().totalFlows) || 0
+//         }));
+        
+//         setUsers(usersData);
+//       } catch (error) {
+//         console.error('Error fetching users:', error);
+//       }
+//     };
+
+//     fetchUsers();
+//   }, []);
+
+
+//   return (
+//     <div className="container mx-auto p-4">
+//       <h2 className="text-2xl font-bold mb-4">Leaderboard</h2>
+//       <div className="bg-white rounded-lg shadow">
+//         {users.map((user, index) => (
+//           <div 
+//             key={user.id}
+//             className="flex items-center p-4 border-b last:border-b-0"
+//           >
+//             <div className="w-12 text-center font-bold">
+//               {/* Rank number */}
+//               #{index + 1}
+//             </div>
+//             <div className="flex-1">
+//               {/* User name */}
+//               <p className="font-semibold">
+//                 {user.displayName || 'Anonymous User'}
+//               </p>
+//             </div>
+//             <div className="text-right">
+//               {/* Trees spared - formatted with 2 decimal places */}
+//               <p className="font-medium">
+//                 {user.treesSpared.toFixed(2)} trees spared
+//               </p>
+//               {/* Total flows - whole number */}
+//               <p className="text-sm text-gray-600">
+//                 {user.totalFlows} flows
+//               </p>
+//             </div>
+//           </div>
+//         ))}
+        
+//         {users.length === 0 && (
+//           <div className="p-4 text-center text-gray-500">
+//             No users found
+//           </div>
+//         )}
+//       </div>
+//     </div>
+//   );
+// };
+
+
