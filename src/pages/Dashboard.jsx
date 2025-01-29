@@ -75,6 +75,12 @@ function Dashboard() {
     }
   };
 
+  // to view just navigate to the downloadUrl
+  const handleViewFlow = (flow) => {
+    window.open(flow.fileUrl,  '_blank', 'noopener, noreferrer');
+    console.log('Viewing flow:', flow.fileUrl);
+  };
+
  
   // Add delete handler
   const handleDeleteFlow = async (flowId) => { 
@@ -181,6 +187,7 @@ function Dashboard() {
             <FlowCard 
             key={flow.id} 
             flow={flow} 
+            onView={handleViewFlow}
             onDelete={handleDeleteFlow}
             onEdit={() => setEditingFlow(flow)}
             />

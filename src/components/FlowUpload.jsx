@@ -230,7 +230,7 @@ const handleAddCustomTag = (e) => {
             <div className="border-2 border-dashed border-gray-300 rounded-lg p-4">
               <input
                 type="file"
-                accept="image/*"
+                accept="*/*"
                 onChange={handleFileChange}
                 className="w-full"
               />

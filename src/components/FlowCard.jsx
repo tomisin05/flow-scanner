@@ -1,8 +1,9 @@
 // components/FlowCard.jsx
 import React, { useState } from 'react';
 import ImageViewerModal from './ImageViewerModal';
+import { FiEdit2, FiTrash2, FiEye } from 'react-icons/fi';
 
-const FlowCard = ({ flow, onEdit, onDelete }) => {
+const FlowCard = ({ flow, onEdit, onDelete, onView }) => {
   const [showImageViewer, setShowImageViewer] = useState(false);
 
 
@@ -10,7 +11,10 @@ const FlowCard = ({ flow, onEdit, onDelete }) => {
     return null;
   }
 
+
   const tournamentName = flow.tournament?.name || flow.tournament || 'Untitled Tournament';
+
+  const isPDF = flow.fileUrl?.toLowerCase().includes('.pdf');
 
 
   return (
@@ -21,11 +25,21 @@ const FlowCard = ({ flow, onEdit, onDelete }) => {
         className="w-full md:w-48 cursor-pointer hover:opacity-90 transition-opacity"
         onClick={() => setShowImageViewer(true)}
       >
+
+        {isPDF ? (
+          <embed
+            src={`${flow.fileUrl}#view=FitH`}
+            type="application/pdf"
+            className="w-full h-48 cursor-pointer"
+            onClick={() => setShowFullImage(true)}
+          />
+        
+        ) :(
         <img
           src={flow.fileUrl}
           alt={`Flow from ${tournamentName}`}
           className="w-full h-48 object-cover rounded"
-        />
+        />)}
       </div>
 
       <div className="flex-1">
@@ -36,11 +50,19 @@ const FlowCard = ({ flow, onEdit, onDelete }) => {
         <p className="text-gray-600 mb-2">Date: {formatDate(flow.createdAt)}</p>
         
         <div className="flex gap-2">
+
+            <button
+              onClick={() => onView(flow)}
+              className="p-2 text-blue-600 hover:text-blue-800"
+              title="View"
+            >
+              <FiEye />
+            </button>
           <button
             onClick={() => onEdit(flow)}
-            className="px-3 py-1 text-sm text-blue-600 hover:text-blue-800"
+            className="px-3 py-1 text-sm text-green-600 hover:text-green-800"
           >
-            Edit
+          <FiEdit2 />
           </button>
           <button
             onClick={() => {
@@ -50,7 +72,7 @@ const FlowCard = ({ flow, onEdit, onDelete }) => {
             }}
             className="px-3 py-1 text-sm text-red-600 hover:text-red-800"
           >
-            Delete
+            <FiTrash2 />
           </button>
         </div>
       </div>
@@ -78,7 +100,6 @@ const FlowCard = ({ flow, onEdit, onDelete }) => {
   </div>
 );
 };
-
 
 
 //     <div className="bg-white rounded-lg shadow-md overflow-hidden">
