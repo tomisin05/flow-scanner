@@ -106,17 +106,16 @@ const handleRFDSubmit = async (rfdData) => {
   };
 
   const handleDelete = async (rfdId) => {
-    {
         (window.confirm('Are you sure you want to delete this RFD?'))
         try {
         // Delete the RFD
-        await deleteRFD(rfdId);
+        await deleteRFD(rfdId, currentUser.uid);
 
         // Update the local state by removing the deleted RFD
         setRfds(currentRfds => currentRfds.filter(rfd => rfd.id !== rfdId));
         } catch (error) {
         console.error('Error deleting RFD:', error);
-        }}
+        }
   };
 
   const rounds = ['Round 1', 'Round 2', 'Round 3', 'Quarter Finals', 'Semi Finals', 'Finals'];

@@ -195,6 +195,10 @@ const handleAddCustomTag = (e) => {
     }
   };
 
+
+  const isPDF = previewUrl?.toLowerCase().includes('.pdf');
+  console.log('Preview URL:', previewUrl)
+
   return (
     <div className="space-y-6">
       {/* Upload Method Selection */}
@@ -266,11 +270,20 @@ const handleAddCustomTag = (e) => {
         {/* Preview */}
         {previewUrl && (
           <div className="mb-4">
+            {isPDF ? (
+          <embed
+            src={`${previewUrl}#view=FitH`}
+            type="application/pdf"
+            className="w-full h-48 cursor-pointer"
+          />
+        
+        ) : (
             <img
-              src={previewUrl}
-              alt="Preview"
-              className="max-h-48 rounded-lg mx-auto"
-            />
+            src={previewUrl}
+            alt="Preview"
+            className="max-h-48 rounded-lg mx-auto"
+          />
+        )}
           </div>
         )}
 

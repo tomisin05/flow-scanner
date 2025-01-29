@@ -1,4 +1,4 @@
-import { collection, addDoc, updateDoc, doc, deleteDoc, query, where, getDocs, orderBy } from 'firebase/firestore';
+import { collection, addDoc, getDoc, updateDoc, doc, deleteDoc, query, where, getDocs, orderBy } from 'firebase/firestore';
 import { db } from './config';
 import { use } from 'react';
 
