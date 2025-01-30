@@ -21,7 +21,7 @@ function FlowUpload({ onSubmit }) {
     division: '',
     tags: [],
     customTag: '' // For adding custom tags  
-  });
+  }); 
   const webcamRef = useRef(null);
 
   // Predefined options
