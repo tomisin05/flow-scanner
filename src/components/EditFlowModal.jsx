@@ -76,15 +76,26 @@ const EditFlowModal = ({ flow, onClose, onSave }) => {
       };
   
     return (
-      <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center">
-        <div className="bg-white rounded-lg p-6 w-full max-w-md">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-semibold">Edit Flow</h2>
-            <button onClick={onClose}>
-              <FiX className="h-6 w-6" />
-            </button>
-          </div>
+    //   <div className=" flex-grow overflow-y-auto fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center">
+    //     <div className="bg-white rounded-lg p-6 w-full max-w-md ">
+    //       <div className="flex justify-between items-center mb-4">
+    //         <h2 className="text-xl font-semibold">Edit Flow</h2>
+    //         <button onClick={onClose}>
+    //           <FiX className="h-6 w-6" />
+    //         </button>
+    //       </div>
+
+    <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-90">
+      <div className="bg-white rounded-lg w-full max-w-md max-h-[90vh] flex flex-col">
+        {/* Header - Fixed */}
+        <div className="flex justify-between items-center p-6 border-b">
+          <h2 className="text-xl font-semibold">Edit Flow</h2>
+          <button onClick={onClose}>
+            <FiX className="h-6 w-6" />
+          </button>
+        </div>
   
+        <div className="flex-1 overflow-y-auto p-6">
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Title */}
             <div>
@@ -247,6 +258,7 @@ const EditFlowModal = ({ flow, onClose, onSave }) => {
             </button>
             </div>
           </form>
+          </div>
         </div>
       </div>
      

@@ -3,6 +3,8 @@ import { useState, useRef, useEffect } from 'react';
 import Webcam from 'react-webcam';
 import { uploadFlow } from '../lib/firebase/flows';
 import { useAuth } from '../contexts/AuthContext';
+import { convertSpreadsheetToPDF } from './SpreadsheetConverter';
+
 
 function FlowUpload({ onSubmit }) {
   const { user } = useAuth();
@@ -11,6 +13,10 @@ function FlowUpload({ onSubmit }) {
   const [previewUrl, setPreviewUrl] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [facingMode, setFacingMode] = useState("user");
+  const [isConverting, setIsConverting] = useState(false);
+  const [error, setError] = useState(null);
+  const [progress, setProgress] = useState(0);
+
   const [metadata, setMetadata] = useState({
     title: '',
     tournament: '',
@@ -60,6 +66,27 @@ function FlowUpload({ onSubmit }) {
       setFile(selectedFile);
       const url = URL.createObjectURL(selectedFile);
       setPreviewUrl(url);
+    }
+  };
+
+  const handleSpreadsheetConversion = async (file) => {
+    try {
+      setIsConverting(true);
+      setError(null);
+      
+      const pdfBlob = await convertSpreadsheetToPDF(file);
+      const downloadURL = await uploadPDFToFirebase(
+        pdfBlob, 
+        `${file.name.split('.')[0]}.pdf`
+      );
+
+      setPreviewUrl(downloadURL);
+      setIsPDF(true);
+      
+    } catch (error) {
+      setError('Error converting file: ' + error.message);
+    } finally {
+      setIsConverting(false);
     }
   };
 
@@ -225,6 +252,17 @@ const handleAddCustomTag = (e) => {
         >
           Use Camera
         </button>
+        <button
+          type="button"
+          onClick={() => setUploadMethod('spreadsheet')}
+          className={`px-4 py-2 rounded ${
+            uploadMethod === 'spreadsheet'
+              ? 'bg-blue-500 text-white'
+              : 'bg-gray-200 text-gray-700'
+          }`}
+        >
+          Convert Spreadsheet
+        </button>
       </div>
 
       <div className="flow-upload-container"> 
@@ -239,7 +277,7 @@ const handleAddCustomTag = (e) => {
                 className="w-full"
               />
             </div>
-          ) : (
+          ) : uploadMethod === 'camera' ?(
             <div className="space-y-4">
               <Webcam
                 audio={false}
@@ -263,6 +301,39 @@ const handleAddCustomTag = (e) => {
               >
                 Capture Photo
               </button>
+            </div>
+          ) : (
+            // Spreadsheet conversion section
+            <div className="border-2 border-dashed border-gray-300 rounded-lg p-4">
+              <input
+                type="file"
+                accept=".xlsx,.xls,.csv,.ods"
+                onChange={(e) => {
+                  const file = e.target.files[0];
+                  if (file) {
+                    handleSpreadsheetConversion(file);
+                  }
+                }}
+                className="w-full"
+              />
+              {isConverting && (
+                <div className="mt-4 space-y-2">
+                  <div className="text-blue-600">
+                    Converting spreadsheet to PDF...
+                  </div>
+                  <div className="w-full bg-gray-200 rounded-full h-2.5">
+                    <div 
+                      className="bg-blue-600 h-2.5 rounded-full transition-all duration-300"
+                      style={{ width: `${progress}%` }}
+                    />
+                  </div>
+                </div>
+              )}
+              {error && (
+                <div className="text-red-600 mt-2">
+                  {error}
+                </div>
+              )}
             </div>
           )}
         </div>
