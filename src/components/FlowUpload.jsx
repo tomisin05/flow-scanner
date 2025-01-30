@@ -19,7 +19,7 @@ function FlowUpload({ onSubmit }) {
     team: '',
     judge: '',
     division: '',
-    tags: [], 
+    tags: [],
     customTag: '' // For adding custom tags     
   });
   const webcamRef = useRef(null);
