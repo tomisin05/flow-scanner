@@ -23,7 +23,7 @@ function FlowUpload({ onSubmit }) {
     customTag: '' // For adding custom tags     
   });  
   const webcamRef = useRef(null); 
- 
+
   // Predefined options
   const rounds = ['Round 1', 'Round 2', 'Round 3', 'Round 4', 'Round 5', 'Round 6', 'Round 7', 'Round 8', 'Doubles',  'Octas', 'Quarters', 'Semis', 'Finals'];
   const divisions = ['Varsity', 'JV', 'Novice'];
